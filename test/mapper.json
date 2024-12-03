@@ -1,0 +1,236 @@
+[
+    {
+        "audio" : "music/albeniz/alb_esp1.mid",
+        "album" : "photo_raw/albeniz.jpeg"
+    },
+
+    {
+        "audio" : "music/albeniz/alb_esp2.mid",
+        "album" : "photo_raw/albeniz.jpeg"
+    },
+
+    {
+        "audio" : "music/albeniz/alb_esp3.mid",
+        "album" : "photo_raw/albeniz.jpeg"
+    },
+
+    {
+        "audio" : "music/albeniz/alb_esp4.mid",
+        "album" : "photo_raw/albeniz.jpeg"
+    },
+
+    { 
+        "audio" : "music/albeniz/alb_esp5.mid",
+        "album" : "photo_raw/albeniz.jpeg"
+    },
+
+    {
+        "audio" : "music/albeniz/alb_esp6.mid",
+        "album" : "photo_raw/albeniz.jpeg"
+    },
+
+    {
+        "audio" : "music/albeniz/alb_se1.mid",
+        "album" : "photo_raw/albeniz.jpeg"
+    },
+
+    {
+        "audio" : "music/albeniz/alb_se2.mid",
+        "album" : "photo_raw/albeniz.jpeg"
+    },
+
+    {
+        "audio" : "music/albeniz/alb_se3.mid",
+        "album" : "photo_raw/albeniz.jpeg"
+    },
+
+    {
+        "audio" : "music/albeniz/alb_se4.mid",
+        "album" : "photo_raw/albeniz.jpeg"
+    },
+
+    {
+        "audio" : "music/albeniz/alb_se5.mid",
+        "album" : "photo_raw/albeniz.jpeg"
+    },
+
+    {
+        "audio" : "music/albeniz/alb_se6.mid",
+        "album" : "photo_raw/albeniz.jpeg"
+    },
+
+    {
+        "audio" : "music/albeniz/alb_se7.mid",
+        "album" : "photo_raw/albeniz.jpeg"
+    },
+
+    {
+        "audio" : "music/albeniz/alb_se8.mid",
+        "album" : "photo_raw/albeniz.jpeg"
+    },
+
+    {
+        "audio" : "music/bach/bach_846.mid",
+        "album" : "photo_raw/bach.jpg" 
+    }, 
+
+    {
+        "audio" : "music/bach/bach_847.mid",
+        "album" : "photo_raw/bach.jpg"
+    },
+
+    {
+        "audio" : "music/bach/bach_850.mid",
+        "album" : "photo_raw/bach.jpg"
+    },
+
+    {
+        "audio" : "music/balakir/islamei.mid",
+        "album" : "photo_raw/balakir.jpg"
+    }, 
+
+    {
+        "audio" : "music/beeth/appass_1.mid",
+        "album" : "photo_raw/beeth.jpg"
+    }, 
+
+    {
+        "audio" : "music/beeth/appass_2.mid",
+        "album" : "photo_raw/beeth.jpg"
+    },
+
+    {
+        "audio" : "music/beeth/appass_3.mid",
+        "album" : "photo_raw/beeth.jpg"
+    },
+
+    {
+        "audio" : "music/beeth/beethoven_hammerklavier_1.mid",
+        "album" : "photo_raw/beeth.jpg"
+    },
+
+    {
+        "audio" : "music/beeth/beethoven_hammerklavier_2.mid",
+        "album" : "photo_raw/beeth.jpg"
+    },
+
+    {
+        "audio" : "music/beeth/beethoven_hammerklavier_3.mid",
+        "album" : "photo_raw/beeth.jpg"
+    },
+
+    {
+        "audio" : "music/beeth/beethoven_hammerklavier_4.mid",
+        "album" : "photo_raw/beeth.jpg"
+    },
+
+    {
+        "audio" : "music/beeth/beethoven_les_adieux_1.mid",
+        "album" : "photo_raw/beeth.jpg"
+    },
+
+    {
+        "audio" : "music/beeth/beethoven_less_adieux_2.mid", 
+        "album" : "photo_raw/beeth.jpg"
+    },
+
+    {
+        "audio" : "music/beeth/beethoven_les_adieus_3.mid",
+        "album" : "photo_raw/beeth.jpg"
+    },
+
+    {
+        "audio" : "music/beeth/beethoven_opus10_1.mid", 
+        "album" : "photo_raw/beeth.jpg"
+    },
+
+    {
+        "audio" : "music/beeth/beethoven_opus10_2.mid",
+        "album" : "photo_raw/beeth.jpg"
+    },
+
+    {
+        "audio" : "music/beeth/beethoven_opus10_3.mid",
+        "album" : "photo_raw/beeth.jpg"
+    },
+
+    {
+        "audio" : "music/beeth/beethoven_opus22_1.mid",
+        "album" : "photo_raw/beeth.jpg"
+    },
+
+    {
+        "audio" : "music/beeth/beethoven_opus22_2.mid",
+        "album" : "photo_raw/beeth.jpg"
+    },
+
+    {
+        "audio" : "music/beeth/beethoven_opus22_3.mid",
+        "album" : "photo_raw/beeth.jpg" 
+    },
+
+    {
+        "audio" : "music/beeth/beethoven_opus22_4.mid",
+        "album" : "photo_raw/beeth.jpg"
+    },
+
+    {
+        "audio" : "music/beeth/beethoven_opus90_1.mid",
+        "album" : "photo_raw/beeth.jpg"
+    },
+
+    {
+        "audio" : "music/beeth/beethoven_opus90_2.mid",
+        "album" : "photo_raw/beeth.jpg"
+    },
+
+    {
+        "audio" : "music/beeth/elise.mid",
+        "album" : "photo_raw/beeth.jpg"
+    },
+
+    {
+        "audio" : "music/beeth/mond_1.mid",
+        "album" : "photo_raw/beeth.jpg"
+    },
+
+    {
+        "audio" : "music/beeth/mond_2.mid",
+        "album" : "photo_raw/beeth.jpg"
+    },
+
+    {
+        "audio" : "music/beeth/mond_3.mid",
+        "album" : "photo_raw/beeth.jpg"
+    },
+
+    {
+        "audio" : "music/beeth/pathetique_1.mid",
+        "album" : "photo_raw/beeth.jpg"
+    },
+
+    {
+        "audio" : "music/beeth/pathetique_2.mid",
+        "album" : "photo_raw/beeth.jpg"
+    },
+
+    {
+        "audio" : "music/beeth/pathetique_3.mid",
+        "album" : "photo_raw/beeth.jpg"
+    },
+    
+    {
+        "audio" : "music/beeth/waldstein_1.mid",
+        "album" : "photo_raw/beeth.jpg"
+    },
+
+    {
+        "audio" : "music/beeth/waldstein_2.mid",
+        "album" : "photo_raw/beeth.jpg"
+    }, 
+
+    {
+        "audio" : "music/beeth/waldstein_3.mid",
+        "album" : "photo_raw/beeth.jpg"
+    }
+]
