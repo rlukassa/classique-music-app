@@ -1,0 +1,30 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Classique Upload Dataset</title>
+        <link href="{% static 'landing/styles.css' %}" rel="stylesheet"> 
+        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <div class = "content-in-center">
+            <p><i>Why did Bach have so many kids?<br>Because he couldnt stop composing!</i></p>
+            
+            <button class="upload-audio-button">
+                <img src="{% static 'landing/images/Musical-Note.png' %}" alt="Musical Note PNG">
+                UPLOAD AUDIO
+            </button>
+            
+            <button class="upload-image-button">
+                <img src="{% static 'landing/images/Imagee.png' %}" alt="Image PNG">
+                UPLOAD IMAGE
+            </button>
+
+            <button class="upload-mapper-button">
+                <img src="{% static 'landing/images/Mapper.png' %}" alt="Mapper PNG">
+                UPLOAD MAPPER
+            </button>
+        </div>
+    </body>
+</html>

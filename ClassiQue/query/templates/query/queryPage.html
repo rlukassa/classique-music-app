@@ -1,0 +1,42 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Classique Upload Dataset</title>
+        <link href="{% static 'query/styles.css' %}" rel="stylesheet"> 
+        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <div class="content-in-center" class="container">
+
+            <!-- Sidebar kiri -->
+            <div class="sidebar">
+                <p><b>Let's Start<br>Searching!</b></p>
+            
+                <button class="query-audio-button">
+                    <img src="{% static 'query/images/Musical-Note.png' %}" alt="Musical Note PNG">
+                    QUERY BY AUDIO
+                </button>
+                
+                <button class="query-image-button">
+                    <img src="{% static 'query/images/Imagee.png' %}" alt="Image PNG">
+                    QUERY BY IMAGE
+                </button>
+
+                <button class="clear-button">
+                    <img src="{% static 'query/images/Clear.png' %}" alt="Clear PNG">
+                    CLEAR
+                </button>
+            </div>
+
+            <!-- Main content (Si kotak putih) -->
+            <div class="content-box">
+                {% block content %}
+                <!-- Konten yang dinamis di sini -->
+                {% endblock %}
+            </div>
+
+        </div>
+    </body>
+</html>
