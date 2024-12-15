@@ -1,0 +1,106 @@
+body {
+    margin: 3%;
+    padding: 0;
+    background-color: black;
+    color: white; /* Warna teks putih */
+    height: 100vh; /* Buat tinggi laman sesuai viewport */
+}
+
+/* Container utama untuk menata sidebar dan content-box */
+.container {
+    display: flex;
+    height: 100vh; /* Membuat container mengambil tinggi penuh layar */
+}
+
+.content-in-center {
+    display: flex;
+    flex-direction: row; /* Susun elemen secara horizontal */
+    height: 100vh; /* Buat elemen mengambil tinggi layar penuh */
+    text-align: center; /* Buat teks berada di tengah */
+    justify-content: center;
+    gap: 20px; /* Jarak antar elemen */
+}
+
+/* Sidebar kiri */
+.sidebar {
+    width: 200px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center; /* Pusatkan secara vertikal */
+    align-items: center; /* Pusatkan secara horizontal */
+}
+
+/* Kotak konten utama di sebelah kanan */
+.content-box {
+    margin: 1%;
+    flex: 1;
+    background-color: white;
+    padding: 20px;
+    overflow-y: auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: 85%; /* Memastikan konten mengisi ruang yang tersedia */
+    color: black; /* Warna teks di dalam content-box */
+    border-radius: 10px;
+}
+
+.query-audio-upload, .query-image-upload {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    display: flex;
+    align-items: center; /* Align secara vertikal */
+    justify-content: center; /* Align secara horizontal */
+    padding: 12px 30px;
+    font-size: 13px;
+    background-color: white;
+    color: black;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    gap: 10px; /* Jarak antara gambar dengan teks */
+    width: 150px;
+    height: 30px;
+    margin: 5px;
+}
+
+.submit-button {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    display: flex;
+    align-items: center; /* Align secara vertikal */
+    justify-content: center; /* Align secara horizontal */
+    padding: 12px 30px;
+    font-size: 13px;
+    background-color: white;
+    color: black;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    width: 210px;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.audio-icon {
+    width: 20px;    /* Ukuran gambar */
+                    /* Height menyesuaikan */
+    rotate: -20deg;
+}
+
+.image-icon {
+    width: 30px;    /* Ukuran gambar */
+                    /* Height menyesuaikan */
+}
+
+.query-audio-button:hover, .query-image-button:hover {
+    background-color: #9A794F; /* Warna latar saat button dihover */
+}
+
+p {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 0;
+    font-size: 30px;
+}
