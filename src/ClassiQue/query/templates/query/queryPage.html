@@ -2,44 +2,46 @@
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>Let's Query</title>
-        <link href="{% static 'query/styles.css' %}" rel="stylesheet"> 
-        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-    </head>
-    <body>
-        <div class="content-in-center" class="container">
-            <!-- Sidebar kiri -->
-            <div class="sidebar">
-                <p><b>Let's Start<br>Searching!</b></p>
+<head>
+    <title>Let's Query</title>
+    <link href="{% static 'query/styles.css' %}" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="content-in-center">
+        <!-- Sidebar kiri -->
+        <div class="sidebar">
+            <p><b>Let's Start<br>Searching!</b></p>
 
-                <form method="POST" enctype="multipart/form-data" action="{% url 'queryPage' %}">
-                    {% csrf_token %} <!-- Token CSRF untuk keamanan -->
-                    
-                    <label class="query-audio-upload">
-                        <input type="file" name="query-audio" accept="audio/wav, audio/mid, audio/midi"/>
-                        <img src="{% static 'query/images/Musical-Note.png' %}" alt="Musical Note PNG" class="audio-icon">
-                        QUERY BY AUDIO
-                    </label>
+            <!-- Form upload file untuk query -->
+            <form method="POST" enctype="multipart/form-data" action="{% url 'queryPage' %}">
+                {% csrf_token %} <!-- Token CSRF untuk keamanan -->
                 
-                    <label class="query-image-upload">
-                        <input type="file" name="query-image" accept="image/jpg, image/jpeg, image/png"/>
-                        <img src="{% static 'query/images/Imagee.png' %}" alt="Image PNG" class="image-icon">
-                        QUERY BY IMAGE
-                    </label>
-                    
-                    <button type="submit" class="submit-button">SUBMIT</button>
-                </form>
+                <!-- Upload audio -->
+                <label class="query-audio-upload">
+                    <input type="file" name="query-audio" accept="audio/wav, audio/mid, audio/midi" />
+                    <img src="{% static 'query/images/Musical-Note.png' %}" alt="Musical Note PNG" class="audio-icon">
+                    QUERY BY AUDIO
+                </label>
+            
+                <!-- Upload image -->
+                <label class="query-image-upload">
+                    <input type="file" name="query-image" accept="image/jpg, image/jpeg, image/png" />
+                    <img src="{% static 'query/images/Imagee.png' %}" alt="Image PNG" class="image-icon">
+                    QUERY BY IMAGE
+                </label>
                 
-            </div>
-
-            <!-- Main content (Si kotak putih) -->
-            <div class="content-box">
-                {% block content %}
-                <!-- Konten yang dinamis di sini -->
-                {% endblock %}
-            </div>
-
+                <!-- Submit button -->
+                <button type="submit" class="submit-button">SUBMIT</button>
+            </form>
         </div>
-    </body>
+
+        <!-- Main content -->
+        <div class="content-box">
+            {% block content %}
+            <!-- Konten dinamis akan dimuat di sini -->
+            {% endblock %}
+        </div>
+    </div>
+</body>
 </html>
