@@ -80,12 +80,18 @@ def calculate_similarity(projection1, projection2):
     norm2 = np.linalg.norm(projection2)
     return dot_product / (norm1 * norm2)
 
-def find_top_similar_images(input_image_projection, database_projections, filenames, top_n=3):
-    """Find the top N most similar images in the database to the input image."""
+def find_top_similar_images(input_image_projection, database_projections, filenames, top_n=3, threshold=0.8):
+    """Find the top N most similar images in the database to the input image with a similarity threshold."""
     similarities = [calculate_similarity(input_image_projection, db_proj) for db_proj in database_projections]
     sorted_indices = np.argsort(similarities)[::-1]  # Sort in descending order
-    top_indices = sorted_indices[:top_n]
+    
+    # Filter berdasarkan threshold
+    filtered_indices = [i for i in sorted_indices if similarities[i] >= threshold]
+    
+    # Ambil top_n dari hasil yang lolos threshold
+    top_indices = filtered_indices[:top_n]
     return [(filenames[i], similarities[i]) for i in top_indices]
+
 
 def main(input_image_path, database_folder, target_size=(75, 75)): # Reduce the scale for faster runtime --> Reducing this will reduce the accuracy too
     """Compare an input image with a database of images and find the top similar ones."""
@@ -105,9 +111,10 @@ def main(input_image_path, database_folder, target_size=(75, 75)): # Reduce the 
 
     # Project the input image onto the principal components
     input_image_projection = np.dot(input_image_centered, principal_components)
+    
+    # Find the top 3 most similar images with a threshold of 0.8
+    top_similar_images = find_top_similar_images(input_image_projection, database_projections, filenames, top_n=3, threshold=0.8)
 
-    # Find the top 3 most similar images in the database
-    top_similar_images = find_top_similar_images(input_image_projection, database_projections, filenames, top_n=3)
 
     print("3 gambar paling mirip:")
     for idx, (image_name, similarity_score) in enumerate(top_similar_images, start=1):
