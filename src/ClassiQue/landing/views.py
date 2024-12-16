@@ -53,14 +53,47 @@ def uploadPage(request):  # Path menuju halaman upload datasets
         return redirect('dataView')
     return render(request, "landing/uploadPage.html")
 
+# def dataView(request):
+#     # Path ke file JSON mapper
+#     mapper_file_path = os.path.join(settings.MEDIA_ROOT, 'data.json')
+#     data = []
+    
+#     if os.path.exists(mapper_file_path):
+#         with open(mapper_file_path, 'r') as f:
+#             json_data = json.load(f)
+#             data = json_data  # Ambil langsung semua isi JSON karena bentuknya list array
+
+#     print("Berhasil!")
+    
+#     return render(request, "landing/dataView.html", {'data': data})
+
 def dataView(request):
     # Path ke file JSON mapper
-    mapper_file_path = os.path.join(settings.MEDIA_ROOT, 'data.json')
+    mapper_file_path = os.path.join(settings.MEDIA_ROOT, 'mapper.json')
     data = []
-    
+
+    print("Directory ke mapper:")
+    print(mapper_file_path)
+
     if os.path.exists(mapper_file_path):
         with open(mapper_file_path, 'r') as f:
             json_data = json.load(f)
-            data = json_data  # Ambil langsung semua isi JSON karena bentuknya list array
+            data = json_data  # Ambil langsung semua isi JSON
+            print(f"Data loaded: {data}")  # Tambahkan log untuk melihat data yang dimuat
     
-    return render(request, "landing/dataView.html", {'data': data})
+    print(f"Data after loading: {data}")  # Tambahkan log untuk memeriksa data yang telah dibaca
+
+    # Paginator untuk membagi data ke dalam 12 item per halaman
+    paginator = Paginator(data, 12)  # 12 items per page
+    page_number = request.GET.get('page')  # Get the page number from the URL
+    
+    print(f"Page number from request: {page_number}")  # Tambahkan print debug di sini
+    
+    if page_number is None or not page_number.isdigit() or int(page_number) < 1:
+        page_number = 1  # Default page jika page tidak ditemukan atau invalid
+
+    page_obj = paginator.get_page(page_number)
+    
+    print(f"Page object: {page_obj}")  # Cek apakah page_obj berisi data
+
+    return render(request, "landing/dataView.html", {'page_obj': page_obj})

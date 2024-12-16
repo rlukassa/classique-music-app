@@ -22,3 +22,26 @@ body {
 .logo {
     width: 400px;
 }
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);  /* 4 kolom */
+    gap: 16px;
+    padding: 16px;
+}
+.grid-item {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+.grid-item img {
+    width: 100%;
+    height: auto;
+}
+.grid-item audio {
+    width: 100%;
+}
+.pagination {
+    margin-top: 16px;
+    display: flex;
+    justify-content: center;
+}
