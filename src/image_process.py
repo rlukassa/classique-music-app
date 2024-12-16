@@ -1,6 +1,8 @@
 from PIL import Image
 import numpy as np
 import os
+import json
+import time  # Tambahkan modul time untuk tracking runtime
 
 def grayscale_and_resize(image_path, target_size):
     """Convert image to grayscale and resize to target_size using manual RGB manipulation."""
@@ -47,7 +49,7 @@ def load_images_from_folder(folder_path, target_size):
         filepath = os.path.join(folder_path, filename)
         _, ext = os.path.splitext(filename)  # Get file extension
         
-        if os.path.isfile(filepath) and ext.lower() in valid_extensions:  # Check if file is valid image
+        if os.path.isfile(filepath) and ext.lower() in valid_extensions and filename != "mapper.json":  # Exclude mapper.json
             try:
                 image_array = grayscale_and_resize(filepath, target_size)
                 flattened_image = flatten_1d(image_array)
@@ -75,28 +77,89 @@ def pca(centerized_data):
 
 def calculate_similarity(projection1, projection2):
     """Calculate similarity as the cosine similarity between two vectors."""
+    # Pastikan vektor tidak semuanya nol
+    if np.all(projection1 == 0) or np.all(projection2 == 0):
+        return 0.0
+    
     dot_product = np.dot(projection1, projection2)
     norm1 = np.linalg.norm(projection1)
     norm2 = np.linalg.norm(projection2)
-    return dot_product / (norm1 * norm2)
+    
+    # Hindari pembagian oleh nol
+    if norm1 == 0 or norm2 == 0:
+        return 0.0
+    
+    # Pastikan hasil dalam rentang [-1, 1], kemudian normalisasi ke [0, 1]
+    cosine_similarity = dot_product / (norm1 * norm2)
+    
+    # Normalisasi ke rentang [0, 1]
+    return (cosine_similarity + 1) / 2
 
-def find_top_similar_images(input_image_projection, database_projections, filenames, top_n=3, threshold=0.8):
-    """Find the top N most similar images in the database to the input image with a similarity threshold."""
+def load_metadata(metadata_path):
+    """Load metadata from mapper.json and organize it by image filename."""
+    if not os.path.exists(metadata_path):
+        raise FileNotFoundError(f"Metadata file not found: {metadata_path}")
+    
+    with open(metadata_path, 'r') as file:
+        raw_metadata = json.load(file)
+    
+    metadata = {}
+    for entry in raw_metadata:
+        # Gunakan nama file gambar sebagai kunci
+        album_image = entry.get("album", "")
+        if album_image:
+            metadata[album_image] = {
+                "Nama": album_image,
+                "Composer": entry.get("composer", "Unknown"),
+                "Album": "Unknown"  # Karena tidak ada informasi album spesifik
+            }
+    return metadata
+
+def find_all_similar_images(input_image_projection, database_projections, filenames, metadata):
+    """Find all images in the database and return their similarity scores."""
     similarities = [calculate_similarity(input_image_projection, db_proj) for db_proj in database_projections]
-    sorted_indices = np.argsort(similarities)[::-1]  # Sort in descending order
-    
-    # Filter berdasarkan threshold
-    filtered_indices = [i for i in sorted_indices if similarities[i] >= threshold]
-    
-    # Ambil top_n dari hasil yang lolos threshold
-    top_indices = filtered_indices[:top_n]
-    return [(filenames[i], similarities[i]) for i in top_indices]
+    result = []
 
+    for filename, similarity in zip(filenames, similarities):
+        # Gunakan nama file sebagai kunci untuk metadata
+        meta = metadata.get(filename, {
+            "Nama": filename,
+            "Composer": "Unknown", 
+            "Album": "Unknown"
+        })
+        
+        result.append({
+            "Nama": meta["Nama"],
+            "Composer": meta["Composer"],
+            "Album": meta["Album"],
+            "Similarity": round(similarity, 2)
+        })
 
-def main(input_image_path, database_folder, target_size=(75, 75)): # Reduce the scale for faster runtime --> Reducing this will reduce the accuracy too
-    """Compare an input image with a database of images and find the top similar ones."""
+    # Sort results by similarity in descending order
+    result.sort(key=lambda x: x['Similarity'], reverse=True)
+
+    return result
+
+def get_query_image(query_folder):
+    """Retrieve the first valid image file from the query folder."""
+    valid_extensions = {".jpeg", ".jpg", ".png"}
+    for filename in os.listdir(query_folder):
+        filepath = os.path.join(query_folder, filename)
+        _, ext = os.path.splitext(filename)
+        if os.path.isfile(filepath) and ext.lower() in valid_extensions:
+            return filepath
+    raise FileNotFoundError(f"No valid image files found in folder: {query_folder}")
+
+def main(query_folder, database_folder, target_size=(70, 70)):
+    """Compare an input image with a database of images and return similarity results."""
+    # Mulai hitung waktu
+    start_time = time.time()
+
+    print("Loading metadata...")
+    metadata_path = os.path.join(database_folder, "mapper.json")
+    metadata = load_metadata(metadata_path)
+
     print("Loading images from database folder...")
-
     # Load and preprocess the database images
     database_images, filenames = load_images_from_folder(database_folder, target_size)
     means, centered_database_images = standardize_data(database_images)
@@ -104,34 +167,33 @@ def main(input_image_path, database_folder, target_size=(75, 75)): # Reduce the 
     # Perform PCA on the database images
     principal_components, database_projections = pca(centered_database_images)
 
-    # Preprocess the input image
-    input_image = grayscale_and_resize(input_image_path, target_size)
+    # Get the query image
+    query_image_path = get_query_image(query_folder)
+    print(f"Query image path: {query_image_path}")
+
+    # Preprocess the query image
+    input_image = grayscale_and_resize(query_image_path, target_size)
     input_image_flattened = flatten_1d(input_image)
     input_image_centered = input_image_flattened - means
 
-    # Project the input image onto the principal components
+    # Project the query image onto the principal components
     input_image_projection = np.dot(input_image_centered, principal_components)
-    
-    # Find the top 3 most similar images with a threshold of 0.8
-    top_similar_images = find_top_similar_images(input_image_projection, database_projections, filenames, top_n=3, threshold=0.8)
 
+    # Find all similar images
+    all_similar_images = find_all_similar_images(input_image_projection, database_projections, filenames, metadata)
 
-    print("3 gambar paling mirip:")
-    for idx, (image_name, similarity_score) in enumerate(top_similar_images, start=1):
-        print(f"{idx}. {image_name} dengan tinggkat kesamaan: {similarity_score:.2f}")
+    # Print results
+    print("Similar Images:")
+    for img in all_similar_images:
+        print(f"Image: {img['Nama']}, Composer: {img['Composer']}, Similarity: {img['Similarity']}")
 
-    # Check for images with similarity above 80%
-    high_similarity_images = [img for img in top_similar_images if img[1] >= 0.8]
-
-    if high_similarity_images:
-        print("\nGambar yang mirip (similarity percentage >= 0.8):")
-        for image_name, similarity_score in high_similarity_images:
-            print(f"- {image_name} with similarity score: {similarity_score:.2f}")
-    else:
-        print("\nTidak ada gambar yang dianggap mirip")
+    # Hitung dan cetak runtime
+    end_time = time.time()
+    runtime = end_time - start_time
+    print(f"\nTotal Runtime: {runtime:.4f} detik")
 
 # Run the main function
 if __name__ == "__main__":
-    input_image_path = "./src/ClassiQue/query-file"  # Path to the input image
-    database_folder = "./src/ClassiQue/uploads"  # Path to the folder containing database images
-    main(input_image_path, database_folder)
+    query_folder = "./ClassiQue/query-file"  # Path to the folder containing the query image
+    database_folder = "./ClassiQue/uploads"  # Path to the folder containing database images
+    main(query_folder, database_folder)
