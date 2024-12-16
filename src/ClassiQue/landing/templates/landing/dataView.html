@@ -14,6 +14,7 @@
         <img src="{% static 'landing/images/ClassiQue-LogoText.png' %}" alt="ClassiQue Logo" class="logo">
         
         <!-- 1. Search Bar -->
+        <!-- BELUM FUNGSIONAL -->
         <div class="search-bar">
             <form method="get" action="">
                 <input type="text" name="search" placeholder="Search..." value="{{ query }}">
@@ -27,7 +28,7 @@
                 <div class="grid-item">
                     <img src="{{ MEDIA_URL }}{{ item.album }}" alt="Image of {{ item.composer }}">
                     <audio controls>
-                        <source src="{{ MEDIA_URL }}{{ item.audio }}" type="audio/midi">
+                        <source src="{{ MEDIA_URL }}{{ item.audio }}" type="audio/mid">
                         Your browser does not support the audio element.
                     </audio>
                     <p>{{ item.composer }}</p>
@@ -39,8 +40,8 @@
         <div class="pagination">
             <span class="page-link">
                 {% if page_obj.has_previous %}
-                    <a href="?page=1&search={{ query }}">&laquo; First</a>
-                    <a href="?page={{ page_obj.previous_page_number }}&search={{ query }}">Previous</a>
+                    <a href="?page=1">&laquo; First</a>
+                    <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
                 {% endif %}
             </span>
     
@@ -49,18 +50,17 @@
                     {% if page_obj.number == num %}
                         <strong>{{ num }}</strong>
                     {% else %}
-                        <a href="?page={{ num }}&search={{ query }}">{{ num }}</a>
+                        <a href="?page={{ num }}">{{ num }}</a>
                     {% endif %}
                 {% endfor %}
             </span>
     
             <span class="page-link">
                 {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}&search={{ query }}">Next</a>
-                    <a href="?page={{ page_obj.paginator.num_pages }}&search={{ query }}">Last &raquo;</a>
+                    <a href="?page={{ page_obj.next_page_number }}">Next</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
                 {% endif %}
             </span>
         </div>
-    </div>
 </body>
 </html>

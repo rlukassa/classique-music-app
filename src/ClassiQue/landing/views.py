@@ -9,7 +9,7 @@ from django.core.paginator import Paginator
 
 # Create your views here.
 
-def home(request):  # Landing page
+def home(request): # Landing page
     return render(request, "landing/home.html")
 
 def clear_folder(folder_path):
@@ -53,6 +53,20 @@ def uploadPage(request):  # Path menuju halaman upload datasets
         return redirect('dataView')
     return render(request, "landing/uploadPage.html")
 
+# def dataView(request):
+#     # Path ke file JSON mapper
+#     mapper_file_path = os.path.join(settings.MEDIA_ROOT, 'data.json')
+#     data = []
+    
+#     if os.path.exists(mapper_file_path):
+#         with open(mapper_file_path, 'r') as f:
+#             json_data = json.load(f)
+#             data = json_data  # Ambil langsung semua isi JSON karena bentuknya list array
+
+#     print("Berhasil!")
+    
+#     return render(request, "landing/dataView.html", {'data': data})
+
 def dataView(request):
     # Path ke file JSON mapper
     mapper_file_path = os.path.join(settings.MEDIA_ROOT, 'mapper.json')
@@ -69,13 +83,6 @@ def dataView(request):
     
     print(f"Data after loading: {data}")  # Tambahkan log untuk memeriksa data yang telah dibaca
 
-    # Dapatkan query dari search bar
-    query = request.GET.get('search', '')
-
-    # Jika ada query pencarian, filter data berdasarkan nama composer
-    if query:
-        data = [item for item in data if query.lower() in item['composer'].lower()]
-
     # Paginator untuk membagi data ke dalam 12 item per halaman
     paginator = Paginator(data, 12)  # 12 items per page
     page_number = request.GET.get('page')  # Get the page number from the URL
@@ -89,4 +96,4 @@ def dataView(request):
     
     print(f"Page object: {page_obj}")  # Cek apakah page_obj berisi data
 
-    return render(request, "landing/dataView.html", {'page_obj': page_obj, 'MEDIA_URL': '/uploads/', 'query': query})
+    return render(request, "landing/dataView.html", {'page_obj': page_obj, 'MEDIA_URL': '/uploads/'})
