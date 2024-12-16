@@ -41,7 +41,7 @@ def load_images_from_folder(folder_path, target_size):
     """Load all images from a folder, preprocess them, and return as a matrix."""
     images = []
     filenames = []
-    valid_extensions = {".jpeg", ".jpg", ".png", ".bmp", ".tiff", ".gif"}  # Valid image formats
+    valid_extensions = {".jpeg", ".jpg", ".png"}  # Valid image formats
     
     for filename in os.listdir(folder_path):
         filepath = os.path.join(folder_path, filename)
@@ -132,6 +132,6 @@ def main(input_image_path, database_folder, target_size=(75, 75)): # Reduce the 
 
 # Run the main function
 if __name__ == "__main__":
-    input_image_path = "./test/photo_raw/balakir.jpg"  # Path to the input image
-    database_folder = "./test/photo_raw"  # Path to the folder containing database images
+    input_image_path = "./src/ClassiQue/query-file"  # Path to the input image
+    database_folder = "./src/ClassiQue/uploads"  # Path to the folder containing database images
     main(input_image_path, database_folder)
