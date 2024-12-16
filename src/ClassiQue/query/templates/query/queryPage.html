@@ -38,9 +38,56 @@
 
         <!-- Main content -->
         <div class="content-box">
-            {% block content %}
-            <!-- Konten dinamis akan dimuat di sini -->
-            {% endblock %}
+            {% if querying %}
+                <div class="grid-container">
+                    <p><b>TOP MATCH!</b></p>
+                        {% if page_obj %}
+                            {% for item in page_obj %}
+                                <div class="grid-item">
+                                    {% if image_true %}
+                                        <!-- Tampilan untuk gambar -->
+                                        <img src="{{ MEDIA_URL }}{{ item.Nama }}" alt="Image of {{ item.Nama }}">
+                                        <p><strong>Nama:</strong> {{ item.Nama }}</p>
+                                        <p><strong>Composer:</strong> {{ item.Composer }}</p>
+                                        <p><strong>Similarity:</strong> {{ item.Similarity }}</p>
+                                    {% else %}
+                                        <!-- Tampilan untuk audio -->
+                                        <!-- <img src="{{ MEDIA_URL }}{{ item.Nama }}" alt="Image of {{ item.Nama }}"> -->
+                                        <p><strong>Nama:</strong> {{ item.Audio }}</p>
+                                        <p><strong>Composer:</strong> {{ item.Composer }}</p>
+                                        <p><strong>Similarity:</strong> {{ item.Similarity }}</p>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <p>No results found.</p>
+                        {% endif %}
+                </div>
+            
+                <!-- Pagination -->
+                <div class="pagination">
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1">&laquo; First</a>
+                        <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                    {% endif %}
+
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <strong>{{ num }}</strong>
+                        {% else %}
+                            <a href="?page={{ num }}">{{ num }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}">Next</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+                    {% endif %}
+                </div>
+
+            {% else %}
+                <p>Nothing here yet...</p>
+            {% endif %}
         </div>
     </div>
 </body>
