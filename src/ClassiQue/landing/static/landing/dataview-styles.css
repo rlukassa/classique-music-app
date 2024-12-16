@@ -34,7 +34,7 @@ body {
     text-align: center;
 }
 .grid-item img {
-    width: 100%;
+    width: 50%;
     height: auto;
 }
 .grid-item audio {

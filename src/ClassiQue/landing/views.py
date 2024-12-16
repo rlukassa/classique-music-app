@@ -96,4 +96,4 @@ def dataView(request):
     
     print(f"Page object: {page_obj}")  # Cek apakah page_obj berisi data
 
-    return render(request, "landing/dataView.html", {'page_obj': page_obj})
+    return render(request, "landing/dataView.html", {'page_obj': page_obj, 'MEDIA_URL': '/uploads/'})
