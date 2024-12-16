@@ -9,7 +9,7 @@ from django.core.paginator import Paginator
 
 # Create your views here.
 
-def home(request):  # Landing page
+def home(request): # Landing page
     return render(request, "landing/home.html")
 
 def clear_folder(folder_path):
@@ -77,7 +77,7 @@ def dataView(request):
         data = [item for item in data if query.lower() in item['composer'].lower()]
 
     # Paginator untuk membagi data ke dalam 12 item per halaman
-    paginator = Paginator(data, 12)  # 12 items per page
+    paginator = Paginator(data, 8)  # 12 items per page
     page_number = request.GET.get('page')  # Get the page number from the URL
     
     print(f"Page number from request: {page_number}")  # Tambahkan print debug di sini
