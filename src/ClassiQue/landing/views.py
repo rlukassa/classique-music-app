@@ -9,7 +9,7 @@ from django.core.paginator import Paginator
 
 # Create your views here.
 
-def home(request): # Landing page
+def home(request):  # Landing page
     return render(request, "landing/home.html")
 
 def clear_folder(folder_path):
@@ -49,7 +49,6 @@ def uploadPage(request):  # Path menuju halaman upload datasets
             saved_path = fs.save(mapper_file.name, mapper_file)
             print(f"Mapper file saved to: {os.path.join(folder_mapper, saved_path)}")
 
-        # return render(request, "landing/dataView.html")
         return redirect('dataView')
     return render(request, "landing/uploadPage.html")
 
@@ -58,35 +57,26 @@ def dataView(request):
     mapper_file_path = os.path.join(settings.MEDIA_ROOT, 'mapper.json')
     data = []
 
-    print("Directory ke mapper:")
-    print(mapper_file_path)
-
+    # Load data dari file JSON
     if os.path.exists(mapper_file_path):
         with open(mapper_file_path, 'r') as f:
             json_data = json.load(f)
-            data = json_data  # Ambil langsung semua isi JSON
-            print(f"Data loaded: {data}")  # Tambahkan log untuk melihat data yang dimuat
-    
-    print(f"Data after loading: {data}")  # Tambahkan log untuk memeriksa data yang telah dibaca
+            data = json_data
 
-    # Dapatkan query dari search bar
-    query = request.GET.get('search', '')
+    # Ambil query pencarian dari URL
+    query = request.GET.get('search', '').lower()  # Ambil parameter 'search' (default kosong)
 
-    # Jika ada query pencarian, filter data berdasarkan nama composer
+    # Filter data berdasarkan pencarian
     if query:
-        data = [item for item in data if query.lower() in item['composer'].lower()]
+        data = [item for item in data if query in item.get('composer', '').lower()]
 
-    # Paginator untuk membagi data ke dalam 12 item per halaman
-    paginator = Paginator(data, 8)  # 12 items per page
-    page_number = request.GET.get('page')  # Get the page number from the URL
-    
-    print(f"Page number from request: {page_number}")  # Tambahkan print debug di sini
-    
-    if page_number is None or not page_number.isdigit() or int(page_number) < 1:
-        page_number = 1  # Default page jika page tidak ditemukan atau invalid
-
+    # Paginator untuk membagi data ke dalam 8 item per halaman
+    paginator = Paginator(data, 8)
+    page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    
-    print(f"Page object: {page_obj}")  # Cek apakah page_obj berisi data
 
-    return render(request, "landing/dataView.html", {'page_obj': page_obj, 'MEDIA_URL': '/uploads/', 'query': query})
+    return render(request, "landing/dataView.html", {
+        'page_obj': page_obj,
+        'MEDIA_URL': '/uploads/',
+        'query': query  # Kirim query kembali ke template
+    })
