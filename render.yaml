@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: classique-music-app
+    env: python
+    region: singapore
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: cd src/ClassiQue && python manage.py migrate && python manage.py collectstatic --noinput && mkdir -p uploads && cp -r demo/* uploads/ 2>/dev/null || echo "No demo" && gunicorn ClassiQue.wsgi:application --bind 0.0.0.0:$PORT
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: ClassiQue.settings_production
+      - key: DEBUG
+        value: False
+      - key: PYTHON_VERSION
+        value: 3.11.0
