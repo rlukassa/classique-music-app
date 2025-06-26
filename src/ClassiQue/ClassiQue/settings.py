@@ -53,6 +53,13 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+# Add whitenoise only if available (for production)
+try:
+    import whitenoise
+    MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
+except ImportError:
+    pass
+
 ROOT_URLCONF = "ClassiQue.urls"
 
 TEMPLATES = [

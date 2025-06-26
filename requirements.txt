@@ -2,3 +2,6 @@ Django>=4.2,<5.0
 numpy>=1.24
 Pillow>=9.0
 mido>=1.2.10
+gunicorn>=20.1.0
+whitenoise>=6.0.0
+psycopg2-binary>=2.9.0

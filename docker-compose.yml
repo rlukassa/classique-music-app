@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./src/ClassiQue/uploads:/app/src/ClassiQue/uploads
+      - ./src/ClassiQue/db.sqlite3:/app/src/ClassiQue/db.sqlite3
+    environment:
+      - DEBUG=False
+      - DJANGO_SETTINGS_MODULE=ClassiQue.settings_production
+    restart: unless-stopped
+
+  # Optional: Add PostgreSQL for production
+  # db:
+  #   image: postgres:13
+  #   environment:
+  #     POSTGRES_DB: classique_db
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: postgres
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data/
+  #   ports:
+  #     - "5432:5432"
+
+# volumes:
+#   postgres_data:
