@@ -1,0 +1,33 @@
+app = "classique-app"
+primary_region = "sin"
+
+[build]
+
+[env]
+  DJANGO_SETTINGS_MODULE = "ClassiQue.settings_production"
+  DEBUG = "False"
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory_mb = 256
+
+[mounts]
+  source = "classique_data"
+  destination = "/app/uploads"
+
+[[statics]]
+  guest_path = "/app/staticfiles"
+  url_prefix = "/static/"
+
+[[statics]]
+  guest_path = "/app/uploads"
+  url_prefix = "/media/"

@@ -11,6 +11,8 @@ WORKDIR /app
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     gcc \
+    libsndfile1 \
+    ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
@@ -24,10 +26,11 @@ COPY . /app/
 WORKDIR /app/src/ClassiQue
 
 # Collect static files
-RUN python manage.py collectstatic --noinput
+RUN python manage.py collectstatic --noinput --settings=ClassiQue.settings_production
 
-# Create uploads directory
+# Create uploads directory and copy demo data
 RUN mkdir -p uploads
+RUN cp -r demo/* uploads/ 2>/dev/null || true
 
 # Expose port
 EXPOSE 8000
