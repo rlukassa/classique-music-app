@@ -8,7 +8,7 @@ import os
 DEBUG = False
 
 # Add your domain here
-ALLOWED_HOSTS = ['*']  # Update this with your actual domain
+ALLOWED_HOSTS = ['*']  # Render handles routing, but you can specify your domain later
 
 # Static files settings for production
 STATIC_URL = '/static/'
