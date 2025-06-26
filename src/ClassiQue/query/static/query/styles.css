@@ -36,10 +36,10 @@ body {
 .content-box {
     margin: 1%;
     flex: 1;
-    background-color: white;
+    background-color: #1e1e1e; /* Darker background for content box */
     padding: 20px;
     overflow-y: auto;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); /* Enhanced shadow for depth */
     height: 85%; /* Memastikan konten mengisi ruang yang tersedia */
     color: black; /* Warna teks di dalam content-box */
     border-radius: 10px;
@@ -84,6 +84,16 @@ input[type="file"] {
     display: none;
 }
 
+.query-audio-upload img { 
+    width: 20px;    /* Ukuran gambar */
+                    /* Height menyesuaikan */
+}
+
+.query-image-upload img { 
+    width: 30px;    /* Ukuran gambar */
+                    /* Height menyesuaikan */
+}
+
 .audio-icon {
     width: 20px;    /* Ukuran gambar */
                     /* Height menyesuaikan */
@@ -102,63 +112,153 @@ input[type="file"] {
 p {
     font-family: 'DM Sans', sans-serif;
     font-weight: 0;
-    font-size: 30px;
+    font-size: 15px;
 }
 
 /* TAMBAHAN UNTUK CONTENT BOX PAGINATION */
 
 .grid-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    display: flex;
+    flex-direction : column; 
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Responsive grid */
     gap: 20px;
-    width: 100%;
+    margin: 20px 0;
 }
 
 .grid-item {
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    padding: 15px;
+    background-color: #2a2a2a; /* Dark background for items */
+    border-radius: 10px;
+    padding: 10px 0px 0px 0px;
     text-align: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Soft shadow for items */
+    transition: transform 0.2s; /* Smooth hover effect */
+}
+
+.grid-item:hover {
+    transform: scale(1.05); /* Slightly enlarge on hover */
 }
 
 .grid-item img {
-    max-width: 100%;
+    width : 300px;
     height: auto;
-    border-radius: 4px;
+    border-radius: 8px; /* Rounded corners for images */
     margin-bottom: 10px;
 }
 
 .grid-item p {
-    margin-bottom: 8px;
+    margin: 5px 0;
+    color: #e0e0e0; /* Lighter text for better contrast */
 }
 
+ Pagination 
 .pagination {
     display: flex;
     justify-content: center;
     margin-top: 20px;
 }
 
-.page-links a,
-.page-links strong {
+.pagination a {
     margin: 0 5px;
-    color: #007BFF;
-    text-decoration: none;
-}
-
-.page-links a:hover,
-.page-links strong {
-    text-decoration: underline;
-}
-
-.page-link a {
     padding: 8px 12px;
-    background-color: #007BFF;
+    background-color: darkslateblue; /* Primary color for pagination links */
     color: white;
-    border-radius: 4px;
-    font-weight: bold;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s; /* Smooth transition for hover */
 }
 
-.page-link a:hover {
-    background-color: #0056b3;
+.pagination a:hover {
+    background-color: #0056b3; /* Darker shade on hover */
 }
+
+.pagination strong {
+    margin: 0 5px;
+    padding: 8px 12px;
+    background-color: darkkhaki; /* Green for current page */
+    color: white;
+    border-radius: 5px;
+}
+
+/* Top Match Section */
+
+.top-match-title p {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #ffffff; /* White title for contrast */
+}
+
+.nothing { 
+    text-align: center;
+    justify-content: center;
+
+}
+
+.nothing p { 
+    font-size: 20px;
+    font-weight: bold;
+    color: #ffffff; /* White text for contrast */
+}
+
+/* Styling untuk search-container */
+.search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #667288f5; /* Warna latar belakang lembut */
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Tambahkan bayangan */
+}
+
+/* Styling untuk form pencarian */
+.search-form {
+    display: flex;
+    width: 100%;
+    max-width: 500px; /* Batasi lebar maksimum */
+    border-radius: 50px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Input pencarian */
+.search-input {
+    flex: 1;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    outline: none;
+    border-radius: 50px 0 0 50px;
+    background-color: #ffffff;
+    color: #7594ab; /* Warna teks */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-input:focus {
+    background-color: #f0f0f0;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Tombol pencarian */
+.search-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: rgb(153, 179, 191);
+    background-color: rgba(69, 69, 137, 0.933); /* Warna tombol */
+    border: none;
+    cursor: pointer;
+    border-radius: 0 50px 50px 0;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.search-button:hover {
+    background-color: #072d56; /* Warna saat hover */
+    transform: scale(1.05); /* Efek zoom saat hover */
+}
+
+.search-button:active {
+    transform: scale(0.95); /* Efek klik */
+}
+

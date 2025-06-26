@@ -22,7 +22,9 @@ def clear_folder(folder_path):
 
 def uploadPage(request):  # Path menuju halaman upload datasets
     if request.method == 'POST':
-        clear_folder(settings.MEDIA_ROOT)  # Bersihkan folder MEDIA_ROOT
+        # Hanya bersihkan file tertentu, bukan semua
+        # clear_folder(settings.MEDIA_ROOT)  # Comment ini karena akan menghapus semua file
+        
         # 1. Proses dataset audio
         audio_files = request.FILES.getlist('audio-dataset')  # Input audio
         if audio_files:

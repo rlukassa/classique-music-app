@@ -8,7 +8,4 @@ urlpatterns = [
     path("upload/", views.uploadPage, name="uploadPage"),  # Halaman upload
     path("dataView/", views.dataView, name="dataView"),  # Halaman data view
     path("query/", include("query.urls")),  # Aplikasi query
-]
-
-# Tambahkan URL untuk file media jika ada
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

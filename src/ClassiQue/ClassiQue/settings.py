@@ -15,8 +15,6 @@ import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-MEDIA_URL = '/uploads/'
-MEDIA_ROOT = BASE_DIR / 'uploads'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -123,6 +121,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = "static/"
+# STATICFILES_DIRS tidak diperlukan jika menggunakan static files di dalam app
+# Django akan otomatis mencari folder static/ di setiap app yang terdaftar
+
+# Media files (uploaded files)
+MEDIA_URL = '/uploads/'
+MEDIA_ROOT = BASE_DIR / 'uploads'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -130,5 +134,5 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Custom settings to handle file uploads
-DATA_UPLOAD_MAX_NUMBER_FILES = 400  # Maksimum jumlah file yang bisa diunggah
+DATA_UPLOAD_MAX_NUMBER_FILES = 99999999999999  # Maksimum jumlah file yang bisa diunggah
 DATA_UPLOAD_MAX_MEMORY_SIZE = 209715200  # 200MB

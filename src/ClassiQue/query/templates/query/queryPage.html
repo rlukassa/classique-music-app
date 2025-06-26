@@ -4,89 +4,80 @@
 <html lang="en">
 <head>
     <title>Let's Query</title>
-    <link href="{% static 'query/styles.css' %}" rel="stylesheet"> 
+    <link href="{% static 'query/styles.css' %}" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="content-in-center">
-        <!-- Sidebar kiri -->
         <div class="sidebar">
             <p><b>Let's Start<br>Searching!</b></p>
-
-            <!-- Form upload file untuk query -->
             <form method="POST" enctype="multipart/form-data" action="{% url 'queryPage' %}">
-                {% csrf_token %} <!-- Token CSRF untuk keamanan -->
-                
-                <!-- Upload audio -->
+                {% csrf_token %}
                 <label class="query-audio-upload">
                     <input type="file" name="query-audio" accept="audio/wav, audio/mid, audio/midi" />
-                    <img src="{% static 'query/images/Musical-Note.png' %}" alt="Musical Note PNG" class="audio-icon">
+                    <img src="{% static 'query/images/Musical-Note.png' %}" alt="Musical Note PNG">
                     QUERY BY AUDIO
                 </label>
-            
-                <!-- Upload image -->
                 <label class="query-image-upload">
                     <input type="file" name="query-image" accept="image/jpg, image/jpeg, image/png" />
-                    <img src="{% static 'query/images/Imagee.png' %}" alt="Image PNG" class="image-icon">
+                    <img src="{% static 'query/images/Imagee.png' %}" alt="Image PNG">
                     QUERY BY IMAGE
                 </label>
-                
-                <!-- Submit button -->
                 <button type="submit" class="submit-button">SUBMIT</button>
             </form>
         </div>
 
-        <!-- Main content -->
         <div class="content-box">
             {% if querying %}
                 <div class="grid-container">
-                    <p><b>TOP MATCH!</b></p>
-                        {% if page_obj %}
-                            {% for item in page_obj %}
-                                <div class="grid-item">
-                                    {% if image_true %}
-                                        <!-- Tampilan untuk gambar -->
-                                        <img src="{{ MEDIA_URL }}{{ item.Nama }}" alt="Image of {{ item.Nama }}">
-                                        <p><strong>Nama:</strong> {{ item.Nama }}</p>
-                                        <p><strong>Composer:</strong> {{ item.Composer }}</p>
-                                        <p><strong>Similarity:</strong> {{ item.Similarity }}</p>
-                                    {% else %}
-                                        <!-- Tampilan untuk audio -->
-                                        <!-- <img src="{{ MEDIA_URL }}{{ item.Nama }}" alt="Image of {{ item.Nama }}"> -->
-                                        <p><strong>Nama:</strong> {{ item.Audio }}</p>
-                                        <p><strong>Composer:</strong> {{ item.Composer }}</p>
-                                        <p><strong>Similarity:</strong> {{ item.Similarity }}</p>
-                                    {% endif %}
-                                </div>
-                            {% endfor %}
-                        {% else %}
-                            <p>No results found.</p>
-                        {% endif %}
+                    {% if page_obj.number == 1 %}
+                        <div class="top-match-title">
+                            <p><b>TOP MATCH!</b></p>
+                            <p class="execution-time">Waktu Eksekusi: {{ execution_time|floatformat:2 }} ms</p>
+                        </div>
+                    {% endif %}
+                    {% for item in page_obj %}
+                        <div class="grid-item">
+                            <img src="../../../uploads/{{ item.Album }}" alt="Image of {{ item.Composer }}">
+                            <div class="keterangan">
+                                <p><strong>Nama:</strong> {{ item.Audio }}</p>
+                                <p><strong>Composer:</strong> {{ item.Composer }}</p>
+                                <p><strong>Similarity:</strong> {{ item.Similarity }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
                 </div>
-            
-                <!-- Pagination -->
+
                 <div class="pagination">
                     {% if page_obj.has_previous %}
-                        <a href="?page=1">&laquo; First</a>
-                        <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                        <a href="?search={{ search_query }}&page=1">&laquo; First</a>
+                        <a href="?search={{ search_query }}&page={{ page_obj.previous_page_number }}">Previous</a>
                     {% endif %}
-
-                    {% for num in page_obj.paginator.page_range %}
+                    {% for num in pagination_range %}
                         {% if page_obj.number == num %}
                             <strong>{{ num }}</strong>
                         {% else %}
-                            <a href="?page={{ num }}">{{ num }}</a>
+                            <a href="?search={{ search_query }}&page={{ num }}">{{ num }}</a>
                         {% endif %}
                     {% endfor %}
-
                     {% if page_obj.has_next %}
-                        <a href="?page={{ page_obj.next_page_number }}">Next</a>
-                        <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+                        <a href="?search={{ search_query }}&page={{ page_obj.next_page_number }}">Next</a>
+                        <a href="?search={{ search_query }}&page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
                     {% endif %}
                 </div>
 
+                <!-- Search bar -->
+                <div class="search-container">
+                    <form method="GET" action="" class="search-form">
+                        <input type="text" name="search" placeholder="Search by name or composer..." 
+                               class="search-input" value="{{ search_query }}">
+                        <button type="submit" class="search-button">Search</button>
+                    </form>
+                </div>
             {% else %}
-                <p>Nothing here yet...</p>
+                <div class="nothing">
+                    <p>Nothing here yet...</p>
+                </div>
             {% endif %}
         </div>
     </div>

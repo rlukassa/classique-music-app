@@ -255,5 +255,325 @@
         "audio" : "waldstein_3.mid",
         "album" : "beeth.jpg",
         "composer" : "Ludwig van Beethoven"
-    } 
+    } ,
+
+    {
+        "audio" : "liz_donjuan.mid",
+        "album" : "liszt.jpg",
+        "composer" : "Franz Liszt"
+    },
+
+    {
+        "audio" : "liz_et_trans4.mid",
+        "album" : "liszt.jpg",
+        "composer" : "Franz Liszt"
+    },
+
+    {
+        "audio" : "liz_et_trans5.mid",
+        "album" : "liszt.jpg",
+        "composer" : "Franz Liszt"
+    },
+
+    {
+        "audio" : "liz_et_trans8.mid",
+        "album" : "liszt.jpg",
+        "composer" : "Franz Liszt"
+    },
+
+    {
+        "audio" : "liz_et1.mid",
+        "album" : "liszt.jpg",
+        "composer" : "Franz Liszt"
+    },
+
+    {
+        "audio" : "liz_et2.mid",
+        "album" : "liszt.jpg",
+        "composer" : "Franz Liszt"
+    },
+
+    {
+        "audio" : "liz_et3.mid",
+        "album" : "liszt.jpg",
+        "composer" : "Franz Liszt"
+    },
+
+    {
+        "audio" : "liz_et4.mid",
+        "album" : "liszt.jpg",
+        "composer" : "Franz Liszt"
+
+    },
+
+
+    {
+        "audio" : "liz_et5.mid",
+        "album" : "liszt.jpg",
+        "composer" : "Franz Liszt"
+    },
+
+    {
+        "audio" : "liz_et6.mid",
+        "album" : "liszt.jpg",
+        "composer" : "Franz Liszt"
+    },
+
+    {
+        "audio" : "liz_liebestraum.mid",
+        "album" : "liszt.jpg",
+        "composer" : "Franz Liszt"
+    },
+
+    {
+        "audio" : "liz_rhap02.mid",
+        "album" : "liszt.jpg",
+        "composer" : "Franz Liszt"
+    },
+
+    {
+        "audio" : "liz_rhap09.mid",
+        "album" : "liszt.jpg",
+        "composer" : "Franz Liszt"
+    },
+
+    {
+        "audio" : "liz_rhap10.mid",
+        "album" : "liszt.jpg",
+        "composer" : "Franz Liszt"
+    },
+
+    {
+        "audio" : "liz_rhap12.mid",
+        "album" : "liszt.jpg",
+        "composer" : "Franz Liszt"
+    },
+
+    {
+        "audio" : "liz_rhap15.mid",
+        "album" : "liszt.jpg",
+        "composer" : "Franz Liszt"
+    },
+
+    {
+        "audio" : "muss_1.mid",
+        "album" : "muss.jpg",
+        "composer" : "Sergei Rachmaninoff"
+    },
+
+    {
+        "audio" : "muss_2.mid",
+        "album" : "muss.jpg",
+        "composer" : "Sergei Rachmaninoff"
+    },
+
+    {
+        "audio" : "muss_3.mid",
+        "album" : "muss.jpg",
+        "composer" : "Sergei Rachmaninoff"
+    },
+
+    {
+        "audio" : "muss_4.mid",
+        "album" : "muss.jpg",
+        "composer" : "Sergei Rachmaninoff"
+    },
+
+    {
+        "audio" : "muss_5.mid",
+        "album" : "muss.jpg",
+        "composer" : "Sergei Rachmaninoff"
+    },
+
+    {
+        "audio" : "muss_6.mid",
+        "album" : "muss.jpg",
+        "composer" : "Sergei Rachmaninoff"
+    },
+
+    {
+        "audio" : "muss_7.mid",
+        "album" : "muss.jpg",
+        "composer" : "Sergei Rachmaninoff"
+    },
+
+    {
+        "audio" : "muss_8.mid",
+        "album" : "muss.jpg",
+        "composer" : "Sergei Rachmaninoff"
+    },
+
+    {
+        "audio" : "DEB_CLAI.MID",
+        "album" : "debussy.jpeg",
+        "composer" : "Claude Debussy"
+    },
+
+    {
+        "audio" : "deb_menu.mid",
+        "album" : "debussy.jpeg",
+        "composer" : "Claude Debussy"
+    },
+
+    {
+        "audio" : "DEB_PASS.MID",
+        "album" : "debussy.jpeg",
+        "composer" : "Claude Debussy"
+    },
+
+    {
+        "audio" : "debussy_cc_1.mid",
+        "album" : "debussy.jpeg",
+        "composer" : "Claude Debussy"
+    },
+
+    {
+        "audio" : "debussy_cc_2.mid",
+        "album" : "debussy.jpeg",
+        "composer" : "Claude Debussy"
+    },
+
+    {
+        "audio" : "debussy_cc_3.mid",
+        "album" : "debussy.jpeg",
+        "composer" : "Claude Debussy"
+    },
+
+    {
+        "audio" : "debussy_cc_4.mid",
+        "album" : "debussy.jpeg",
+        "composer" : "Claude Debussy"
+    },
+
+    {
+        "audio" : "debussy_cc_6.mid",
+        "album" : "debussy.jpeg",
+        "composer" : "Claude Debussy"
+    },
+
+    {
+        "audio" : "mz_311_1.mid",
+        "album" : "mozart.jpg",
+        "composer" : "Wolfgang Amadeus Mozart"
+    },
+
+    {
+        "audio" : "mz_311_2.mid",
+        "album" : "mozart.jpg",
+        "composer" : "Wolfgang Amadeus Mozart"
+    },
+
+    {
+        "audio" : "mz_311_3.mid",
+        "album" : "mozart.jpg",
+        "composer" : "Wolfgang Amadeus Mozart"
+    },
+
+    {
+        "audio" : "mz_330_1.mid",
+        "album" : "mozart.jpg",
+        "composer" : "Wolfgang Amadeus Mozart"
+    },
+
+    {
+        "audio" : "mz_330_2.mid",
+        "album" : "mozart.jpg",
+        "composer" : "Wolfgang Amadeus Mozart"
+    },
+
+    {
+        "audio" : "mz_330_3.mid",
+        "album" : "mozart.jpg",
+        "composer" : "Wolfgang Amadeus Mozart"
+    },
+
+    {
+        "audio" : "mz_331_1.mid",
+        "album" : "mozart.jpg",
+        "composer" : "Wolfgang Amadeus Mozart"
+    },
+
+    {
+        "audio" : "mz_331_2.mid",
+        "album" : "mozart.jpg",
+        "composer" : "Wolfgang Amadeus Mozart"
+    },
+
+    {
+        "audio" : "mz_331_3.mid",
+        "album" : "mozart.jpg",
+        "composer" : "Wolfgang Amadeus Mozart"
+    },
+
+    {
+        "audio" : "mz_332_1.mid",
+        "album" : "mozart.jpg",
+        "composer" : "Wolfgang Amadeus Mozart"
+    },
+
+    {
+        "audio" : "mz_332_2.mid",
+        "album" : "mozart.jpg",
+        "composer" : "Wolfgang Amadeus Mozart"
+    },
+
+    {
+        "audio" : "mz_332_3.mid",
+        "album" : "mozart.jpg",
+        "composer" : "Wolfgang Amadeus Mozart"
+    },
+
+    {
+        "audio" : "mz_333_1.mid",
+        "album" : "mozart.jpg",
+        "composer" : "Wolfgang Amadeus Mozart"
+    },
+
+    {
+        "audio" : "mz_333_2.mid",
+        "album" : "mozart.jpg",
+        "composer" : "Wolfgang Amadeus Mozart"
+    },
+
+    {
+        "audio" : "mz_333_3.mid",
+        "album" : "mozart.jpg",
+        "composer" : "Wolfgang Amadeus Mozart"
+    },
+
+    {
+        "audio" : "mz_545_1.mid",
+        "album" : "mozart.jpg",
+        "composer" : "Wolfgang Amadeus Mozart"
+    },
+
+    {
+        "audio" : "mz_545_2.mid",
+        "album" : "mozart.jpg",
+        "composer" : "Wolfgang Amadeus Mozart"
+    },
+
+    {
+        "audio" : "mz_545_3.mid",
+        "album" : "mozart.jpg",
+        "composer" : "Wolfgang Amadeus Mozart"
+    },
+
+    {
+        "audio" : "mz_570_1.mid",
+        "album" : "mozart.jpg",
+        "composer" : "Wolfgang Amadeus Mozart"
+    },
+
+    {
+        "audio" : "mz_570_2.mid",
+        "album" : "mozart.jpg",
+        "composer" : "Wolfgang Amadeus Mozart"
+    },
+
+    {
+        "audio" : "mz_570_3.mid",
+        "album" : "mozart.jpg",
+        "composer" : "Wolfgang Amadeus Mozart"
+    }
 ]
