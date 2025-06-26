@@ -76,7 +76,6 @@ def loadMapper(mapper, search_path='./uploads'):
         print(f"File {mapper} tidak ditemukan di {search_path}.")
         return None
 
-
 # Normalisasi Histogram
 def normalizeHistogram(hist):
     """Normalisasi histogram."""

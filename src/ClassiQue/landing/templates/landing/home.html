@@ -2,20 +2,47 @@
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>Welcome To ClassiQue</title>
-        <link href="{% static 'landing/styles.css' %}" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-    </head>
-    <body>
-        <div class = "content-in-center">
-            <img src="{% static 'landing/images/ClassiQue-LogoText.png' %}" alt="ClassiQue Logo">
-            <button class="start-button">
-                <a href="{% url 'uploadPage' %}">
-                    <img src="{% static 'landing/images/Musical-Note.png' %}" alt="Musical Note PNG">
-                    START
-                </a>
-            </button>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome To ClassiQue</title>
+    <link href="{% static 'landing/styles.css' %}?v=2.0" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="content-in-center">
+        <div class="home-logo-container">
+            <img src="{% static 'landing/images/ClassiQue-LogoText.png' %}" alt="ClassiQue Logo" class="logo">
         </div>
-    </body>
+        
+        <div class="home-quote">
+            <p class="quote-text">
+                <i class="fas fa-quote-left"></i>
+                Music is the universal language of mankind
+                <i class="fas fa-quote-right"></i>
+            </p>
+        </div>
+        
+        <a href="{% url 'uploadPage' %}" class="start-button">
+            <i class="fas fa-music"></i>
+            <span>GET STARTED</span>
+        </a>
+        
+        <div class="home-features">
+            <div class="feature-item">
+                <i class="fas fa-upload"></i>
+                <span>Upload your music dataset</span>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-search"></i>
+                <span>Search by audio or image</span>
+            </div>
+            <div class="feature-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Get similarity results</span>
+            </div>
+        </div>
+    </div>
+</body>
 </html>

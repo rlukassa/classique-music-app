@@ -5,20 +5,62 @@ import json
 
 def grayscale_and_resize(image_path, target_size):
     """Convert image to grayscale and resize to target_size using manual RGB manipulation."""
-    # Open image
-    image = Image.open(image_path)
+    try:
+        # Open image and convert to RGB to ensure consistency
+        image = Image.open(image_path)
+        
+        # Convert to RGB if it's not already (handles RGBA, LA, P, etc.)
+        if image.mode != 'RGB':
+            image = image.convert('RGB')
 
-    # Convert image to numpy array
-    image_array = np.array(image)
+        # Convert image to numpy array
+        image_array = np.array(image)
 
-    # Convert to grayscale manually if image has RGB channels
-    if len(image_array.shape) == 3:  # Image has RGB channels
-        grayscale_image = np.dot(image_array[...,:3], [0.2989, 0.5870, 0.1140])  # Apply grayscale formula
-    else:  # Image is already grayscale
-        grayscale_image = image_array
+        # Ensure we have a valid RGB image after conversion
+        if len(image_array.shape) == 3 and image_array.shape[2] == 3:
+            # Apply RGB to grayscale conversion formula
+            grayscale_image = np.dot(image_array, [0.2989, 0.5870, 0.1140])
+        elif len(image_array.shape) == 3 and image_array.shape[2] == 4:
+            # RGBA image, use only RGB channels
+            grayscale_image = np.dot(image_array[...,:3], [0.2989, 0.5870, 0.1140])
+        elif len(image_array.shape) == 3 and image_array.shape[2] == 1:
+            # Single channel image in 3D array
+            grayscale_image = image_array.squeeze()
+        elif len(image_array.shape) == 2:
+            # Already grayscale (2D array)
+            grayscale_image = image_array
+        else:
+            # Fallback: convert using PIL's built-in grayscale conversion
+            grayscale_pil = image.convert('L')
+            grayscale_image = np.array(grayscale_pil)
 
-    # Normalize to 0-255 and convert to uint8
-    grayscale_image = np.clip(grayscale_image, 0, 255).astype(np.uint8)
+        # Normalize to 0-255 and convert to uint8
+        grayscale_image = np.clip(grayscale_image, 0, 255).astype(np.uint8)
+        
+    except Exception as e:
+        print(f"Error in grayscale conversion for {image_path}: {e}")
+        # Fallback: use PIL's built-in conversion
+        try:
+            image = Image.open(image_path)
+            grayscale_pil = image.convert('L')
+            grayscale_image = np.array(grayscale_pil)
+        except Exception as fallback_error:
+            print(f"Fallback conversion also failed for {image_path}: {fallback_error}")
+            raise fallback_error
+
+    # Resize the grayscale image
+    input_height, input_width = grayscale_image.shape
+    output_width, output_height = target_size
+    row_scale = input_height / output_height
+    col_scale = input_width / output_width
+
+    # Create indices for resizing
+    row_indices = (np.arange(output_height) * row_scale).astype(int)
+    col_indices = (np.arange(output_width) * col_scale).astype(int)
+
+    resized_image = grayscale_image[row_indices][:, col_indices]
+
+    return resized_image
 
     # Resize the grayscale image
     input_height, input_width = grayscale_image.shape
@@ -58,12 +100,25 @@ def load_images_from_folder(folder_path, target_size):
         
         if os.path.isfile(filepath) and ext.lower() in valid_extensions:  # Check if file is valid image
             try:
+                # Check if file is readable as image
+                with Image.open(filepath) as test_img:
+                    test_img.verify()  # Verify image integrity
+                
+                # Reopen image for processing (verify() can corrupt the image object)
+                test_img = Image.open(filepath)
+                test_img.load()  # Ensure image is fully loaded
+                
+                # Process the image
                 image_array = grayscale_and_resize(filepath, target_size)
                 flattened_image = flatten_1d(image_array)
                 images.append(flattened_image)
                 filenames.append(filename)
+                print(f"Successfully processed {filename}")
+                
             except Exception as e:
                 print(f"Error processing {filename}: {e}")
+                print(f"Skipping {filename} due to processing error")
+                continue
     
     return np.array(images), filenames
 

@@ -4,66 +4,201 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data View</title>
-    <link href="{% static 'landing/dataview-styles.css' %}" rel="stylesheet">
+    <title>Dataset Overview - ClassiQue</title>
+    <link href="{% static 'landing/styles.css' %}?v=2.0" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="content-in-center">
-        <!-- 0. Heading -->
-        <img src="{% static 'landing/images/ClassiQue-LogoText.png' %}" alt="ClassiQue Logo" class="logo">
+    <div class="dataview-container">
+        <!-- Header -->
+        <div class="dataview-header">
+            <img src="{% static 'landing/images/ClassiQue-LogoText.png' %}" alt="ClassiQue Logo" class="logo">
+            <h1><i class="fas fa-database"></i> Dataset Overview</h1>
+            <p class="subtitle">Browse through your uploaded music dataset</p>
+        </div>
         
-        <!-- 1. Search Bar -->
-        <div class="search-bar">
-            <form method="get" action="">
-                <input type="text" name="search" placeholder="Search..." value="{{ query }}">
-                <button type="submit">Search</button>
+        <!-- Search Bar -->
+        <div class="search-section">
+            <form method="get" action="" class="search-form">
+                <div class="search-input-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" name="search" placeholder="Search by composer name..." value="{{ query }}" class="search-input">
+                    <button type="submit" class="search-button">
+                        <i class="fas fa-search"></i>
+                        <span>Search</span>
+                    </button>
+                </div>
             </form>
+            {% if query %}
+                <div class="search-results-info">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Showing results for "<strong>{{ query }}</strong>"</span>
+                    <a href="{% url 'dataView' %}" class="clear-search">
+                        <i class="fas fa-times"></i> Clear
+                    </a>
+                </div>
+            {% endif %}
         </div>
 
-        <!-- 2. Grid -->
+        <!-- Results Summary -->
+        <div class="results-summary">
+            <div class="summary-stats">
+                <div class="stat-item">
+                    <i class="fas fa-music"></i>
+                    <span>{{ page_obj.paginator.count }} Total Items</span>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-eye"></i>
+                    <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grid Container -->
         <div class="grid-container">
             {% for item in page_obj %}
-                <div class="grid-item">
-                    <img src="{{ MEDIA_URL }}{{ item.album }}" alt="Image of {{ item.composer }}">
-                    <p class="p-khusus">{{ item.composer }}</p>
-                    <p>{{ item.audio }}<br>{{ item.album }}</p>
+                <div class="grid-item" data-composer="{{ item.composer }}">
+                    <div class="image-frame">
+                        <div class="image-container">
+                            <img src="{{ MEDIA_URL }}{{ item.album }}" alt="Album cover for {{ item.composer }}" loading="lazy">
+                            <div class="image-overlay">
+                                <div class="overlay-content">
+                                    <i class="fas fa-music"></i>
+                                    <span>View Details</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item-details">
+                        <h3 class="composer-name">{{ item.composer }}</h3>
+                        <div class="file-info">
+                            <div class="file-detail">
+                                <i class="fas fa-file-audio"></i>
+                                <span>{{ item.audio }}</span>
+                            </div>
+                            <div class="file-detail">
+                                <i class="fas fa-image"></i>
+                                <span>{{ item.album }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="empty-state">
+                    <i class="fas fa-search"></i>
+                    <h3>No Results Found</h3>
+                    <p>{% if query %}No items match your search criteria.{% else %}No data available. Please upload your dataset first.{% endif %}</p>
+                    {% if not query %}
+                        <a href="{% url 'uploadPage' %}" class="btn btn-primary">
+                            <i class="fas fa-upload"></i>
+                            Upload Dataset
+                        </a>
+                    {% endif %}
                 </div>
             {% endfor %}
         </div>
     
-        <!-- Pagination -->
-        <div class="pagination">
-            <span class="page-link">
+        <!-- Enhanced Pagination -->
+        {% if page_obj.paginator.num_pages > 1 %}
+        <div class="pagination-container">
+            <div class="pagination">
                 {% if page_obj.has_previous %}
-                    <a href="?search={{ query }}&page=1">&laquo; First</a>
-                    <a href="?search={{ query }}&page={{ page_obj.previous_page_number }}">Previous</a>
+                    <a href="?search={{ query }}&page=1" class="page-btn first-page" title="First Page">
+                        <i class="fas fa-angle-double-left"></i>
+                    </a>
+                    <a href="?search={{ query }}&page={{ page_obj.previous_page_number }}" class="page-btn prev-page" title="Previous Page">
+                        <i class="fas fa-angle-left"></i>
+                        <span>Previous</span>
+                    </a>
                 {% endif %}
-            </span>
-    
-            <span class="page-links">
-                {% for num in page_obj.paginator.page_range %}
-                    {% if page_obj.number == num %}
-                        <strong>{{ num }}</strong>
-                    {% else %}
-                        <a href="?search={{ query }}&page={{ num }}">{{ num }}</a>
-                    {% endif %}
-                {% endfor %}
-            </span>
-    
-            <span class="page-link">
+        
+                <div class="page-numbers">
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <span class="page-btn current-page">{{ num }}</span>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <a href="?search={{ query }}&page={{ num }}" class="page-btn">{{ num }}</a>
+                        {% elif num == 1 or num == page_obj.paginator.num_pages %}
+                            <a href="?search={{ query }}&page={{ num }}" class="page-btn">{{ num }}</a>
+                            {% if num == 1 and page_obj.number > 4 %}
+                                <span class="page-ellipsis">...</span>
+                            {% elif num == page_obj.paginator.num_pages and page_obj.number < page_obj.paginator.num_pages|add:'-3' %}
+                                <span class="page-ellipsis">...</span>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+        
                 {% if page_obj.has_next %}
-                    <a href="?search={{ query }}&page={{ page_obj.next_page_number }}">Next</a>
-                    <a href="?search={{ query }}&page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
+                    <a href="?search={{ query }}&page={{ page_obj.next_page_number }}" class="page-btn next-page" title="Next Page">
+                        <span>Next</span>
+                        <i class="fas fa-angle-right"></i>
+                    </a>
+                    <a href="?search={{ query }}&page={{ page_obj.paginator.num_pages }}" class="page-btn last-page" title="Last Page">
+                        <i class="fas fa-angle-double-right"></i>
+                    </a>
                 {% endif %}
-            </span>
+            </div>
+            
+            <div class="pagination-info">
+                <span>Showing {{ page_obj.start_index }}-{{ page_obj.end_index }} of {{ page_obj.paginator.count }} items</span>
+            </div>
         </div>
+        {% endif %}
 
-        <!-- NEXT PAGE SUBMIT BUTTON -->
-        <button class="start-query-button">
-            <a href="{% url 'queryPage' %}">
-                START QUERY
+        <!-- Action Buttons -->
+        <div class="action-section">
+            <a href="{% url 'queryPage' %}" class="btn btn-primary btn-large">
+                <i class="fas fa-search"></i>
+                Start Query
             </a>
-        </button>
+            <a href="{% url 'uploadPage' %}" class="btn btn-secondary">
+                <i class="fas fa-upload"></i>
+                Upload More
+            </a>
+            <a href="{% url 'home' %}" class="btn btn-outline">
+                <i class="fas fa-home"></i>
+                Back to Home
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Image loading animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const images = document.querySelectorAll('.grid-item img');
+            
+            images.forEach(img => {
+                img.addEventListener('load', function() {
+                    this.parentElement.classList.add('loaded');
+                });
+                
+                if (img.complete) {
+                    img.parentElement.classList.add('loaded');
+                }
+            });
+
+            // Grid item click handling
+            const gridItems = document.querySelectorAll('.grid-item');
+            gridItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const composer = this.dataset.composer;
+                    // Could implement modal or navigation to detailed view
+                    console.log('Clicked on:', composer);
+                });
+            });
+
+            // Search input focus handling
+            const searchInput = document.querySelector('.search-input');
+            searchInput.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+            
+            searchInput.addEventListener('blur', function() {
+                this.parentElement.classList.remove('focused');
+            });
+        });
+    </script>
 </body>
 </html>

@@ -1,0 +1,88 @@
+body {
+    margin: 2%;
+    padding: 10px;
+    background-color: black;
+    color: white;
+    height: 100vh;
+}
+.content-in-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+}
+.search-bar {
+    margin: 0;
+    text-align: center;
+    font-family: 'DM Sans', sans-serif;
+}
+.logo {
+    width: 400px;
+}
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);  /* 4 kolom */
+    gap: 5px;  /* Kurangi jarak antar kolom dan baris */
+    padding: 15px;  /* Kurangi padding dari grid container */
+    margin-top: 30px;
+}
+
+.grid-item {
+    padding: 0px;  /* Kurangi padding pada grid item */
+    text-align: center;
+    gap: 5px;  /* Kurangi jarak antar elemen dalam grid item */
+    margin-bottom: 40px;
+}
+.grid-item img {
+    width: 40%;
+    height: auto;
+}
+.grid-item audio {
+    width: 70%;
+    height: 12%;
+    font-size: 'DM Sans', sans-serif;
+}
+.pagination {
+    display: flex;
+    justify-content: center;
+    font-family: 'DM Sans', sans-serif;
+    color: white;
+    gap: 10px;
+}
+.pagination a {
+    /* text-decoration: none; */
+    color: inherit;
+}
+p {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    margin: 0px;
+}
+
+.p-khusus {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+}
+.start-query-button {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    display: flex;
+    align-items: center; /* Align secara vertikal */
+    justify-content: center; /* Align secara horizontal */
+    padding: 15px 50px;
+    font-size: 15px;
+    background-color: #9A794F;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    gap: 10px; /* Jarak antara gambar dengan teks */
+    margin: 10px;
+    text-decoration: none; /* Hapus underline */
+}
+.start-query-button a{
+    text-decoration: none;
+    color: inherit;
+}

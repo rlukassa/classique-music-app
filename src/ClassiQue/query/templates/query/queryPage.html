@@ -3,83 +3,306 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Let's Query</title>
-    <link href="{% static 'query/styles.css' %}" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Query Search - ClassiQue</title>
+    <link href="{% static 'landing/styles.css' %}?v=2.0" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="content-in-center">
-        <div class="sidebar">
-            <p><b>Let's Start<br>Searching!</b></p>
-            <form method="POST" enctype="multipart/form-data" action="{% url 'queryPage' %}">
+    <div class="query-container">
+        <!-- Query Sidebar -->
+        <div class="query-sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-search"></i> Search Your Music</h2>
+                <p>Upload an audio file or image to find similar content</p>
+            </div>
+            
+            <form method="POST" enctype="multipart/form-data" action="{% url 'queryPage' %}" class="query-form" id="queryForm">
                 {% csrf_token %}
-                <label class="query-audio-upload">
-                    <input type="file" name="query-audio" accept="audio/wav, audio/mid, audio/midi" />
-                    <img src="{% static 'query/images/Musical-Note.png' %}" alt="Musical Note PNG">
-                    QUERY BY AUDIO
-                </label>
-                <label class="query-image-upload">
-                    <input type="file" name="query-image" accept="image/jpg, image/jpeg, image/png" />
-                    <img src="{% static 'query/images/Imagee.png' %}" alt="Image PNG">
-                    QUERY BY IMAGE
-                </label>
-                <button type="submit" class="submit-button">SUBMIT</button>
+                
+                <div class="upload-options">
+                    <!-- Audio Query -->
+                    <label class="query-upload-box audio-query">
+                        <input type="file" name="query-audio" accept="audio/wav,audio/mid,audio/midi,.wav,.mid,.midi" id="audio-query-input" />
+                        <div class="upload-content">
+                            <i class="fas fa-music upload-icon"></i>
+                            <h3>Query by Audio</h3>
+                            <p>Upload WAV, MIDI files</p>
+                            <span class="file-types">Supported: .wav, .mid, .midi</span>
+                        </div>
+                        <div class="file-preview" id="audio-query-preview"></div>
+                    </label>
+
+                    <!-- Image Query -->
+                    <label class="query-upload-box image-query">
+                        <input type="file" name="query-image" accept="image/jpg,image/jpeg,image/png,.jpg,.jpeg,.png" id="image-query-input" />
+                        <div class="upload-content">
+                            <i class="fas fa-image upload-icon"></i>
+                            <h3>Query by Image</h3>
+                            <p>Upload JPG, PNG files</p>
+                            <span class="file-types">Supported: .jpg, .jpeg, .png</span>
+                        </div>
+                        <div class="file-preview" id="image-query-preview"></div>
+                    </label>
+                </div>
+
+                <button type="submit" class="query-submit-btn" id="submitBtn">
+                    <i class="fas fa-search"></i>
+                    <span>Start Search</span>
+                </button>
             </form>
+
+            <!-- Navigation Links -->
+            <div class="sidebar-navigation">
+                <a href="{% url 'home' %}" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <a href="{% url 'dataView' %}" class="nav-link">
+                    <i class="fas fa-database"></i>
+                    <span>Dataset</span>
+                </a>
+            </div>
         </div>
 
-        <div class="content-box">
+        <!-- Results Content -->
+        <div class="query-results">
             {% if querying %}
-                <div class="grid-container">
-                    {% if page_obj.number == 1 %}
-                        <div class="top-match-title">
-                            <p><b>TOP MATCH!</b></p>
-                            <p class="execution-time">Waktu Eksekusi: {{ execution_time|floatformat:2 }} ms</p>
-                        </div>
-                    {% endif %}
+                <!-- Results Header -->
+                <div class="results-header">
+                    <div class="results-info">
+                        <h1><i class="fas fa-search-plus"></i> Search Results</h1>
+                        {% if page_obj.number == 1 %}
+                            <div class="execution-stats">
+                                <div class="stat-badge">
+                                    <i class="fas fa-clock"></i>
+                                    <span>{{ execution_time|floatformat:2 }} ms</span>
+                                </div>
+                                <div class="stat-badge">
+                                    <i class="fas fa-list"></i>
+                                    <span>{{ page_obj.paginator.count }} results</span>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Search Filter -->
+                    <div class="search-container">
+                        <form method="GET" action="" class="search-form">
+                            <div class="search-input-group">
+                                <i class="fas fa-filter search-icon"></i>
+                                <input type="text" name="search" placeholder="Filter results by name or composer..." 
+                                       class="search-input" value="{{ search_query }}">
+                                <button type="submit" class="search-button">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </form>
+                        {% if search_query %}
+                            <div class="search-results-info">
+                                <span>Filtered by: "<strong>{{ search_query }}</strong>"</span>
+                                <a href="{% url 'queryPage' %}" class="clear-filter">
+                                    <i class="fas fa-times"></i> Clear
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Results Grid -->
+                <div class="results-grid">
                     {% for item in page_obj %}
-                        <div class="grid-item">
-                            <img src="../../../uploads/{{ item.Album }}" alt="Image of {{ item.Composer }}">
-                            <div class="keterangan">
-                                <p><strong>Nama:</strong> {{ item.Audio }}</p>
-                                <p><strong>Composer:</strong> {{ item.Composer }}</p>
-                                <p><strong>Similarity:</strong> {{ item.Similarity }}</p>
+                        <div class="result-item {% if forloop.first and page_obj.number == 1 %}top-match{% endif %}">
+                            {% if forloop.first and page_obj.number == 1 %}
+                                <div class="top-match-badge">
+                                    <i class="fas fa-crown"></i>
+                                    <span>Best Match</span>
+                                </div>
+                            {% endif %}
+                            
+                            <div class="result-image-frame">
+                                <div class="image-container">
+                                    <img src="../../../uploads/{{ item.Album }}" alt="Album cover for {{ item.Composer }}" loading="lazy">
+                                    <div class="similarity-overlay">
+                                        <div class="similarity-score">
+                                            <i class="fas fa-percent"></i>
+                                            <span>{{ item.Similarity|floatformat:1 }}%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="result-details">
+                                <h3 class="track-name">{{ item.Audio }}</h3>
+                                <p class="composer-name">
+                                    <i class="fas fa-user-music"></i>
+                                    {{ item.Composer }}
+                                </p>
+                                <div class="match-info">
+                                    <div class="similarity-bar">
+                                        <div class="similarity-fill" data-similarity="{{ item.Similarity }}"></div>
+                                    </div>
+                                    <span class="similarity-text">{{ item.Similarity|floatformat:2 }}% match</span>
+                                </div>
                             </div>
                         </div>
                     {% endfor %}
                 </div>
 
-                <div class="pagination">
-                    {% if page_obj.has_previous %}
-                        <a href="?search={{ search_query }}&page=1">&laquo; First</a>
-                        <a href="?search={{ search_query }}&page={{ page_obj.previous_page_number }}">Previous</a>
-                    {% endif %}
-                    {% for num in pagination_range %}
-                        {% if page_obj.number == num %}
-                            <strong>{{ num }}</strong>
-                        {% else %}
-                            <a href="?search={{ search_query }}&page={{ num }}">{{ num }}</a>
+                <!-- Enhanced Pagination -->
+                {% if page_obj.paginator.num_pages > 1 %}
+                <div class="pagination-container">
+                    <div class="pagination">
+                        {% if page_obj.has_previous %}
+                            <a href="?search={{ search_query }}&page=1" class="page-btn first-page" title="First Page">
+                                <i class="fas fa-angle-double-left"></i>
+                            </a>
+                            <a href="?search={{ search_query }}&page={{ page_obj.previous_page_number }}" class="page-btn prev-page" title="Previous Page">
+                                <i class="fas fa-angle-left"></i>
+                                <span>Previous</span>
+                            </a>
                         {% endif %}
-                    {% endfor %}
-                    {% if page_obj.has_next %}
-                        <a href="?search={{ search_query }}&page={{ page_obj.next_page_number }}">Next</a>
-                        <a href="?search={{ search_query }}&page={{ page_obj.paginator.num_pages }}">Last &raquo;</a>
-                    {% endif %}
+                
+                        <div class="page-numbers">
+                            {% for num in pagination_range %}
+                                {% if page_obj.number == num %}
+                                    <span class="page-btn current-page">{{ num }}</span>
+                                {% else %}
+                                    <a href="?search={{ search_query }}&page={{ num }}" class="page-btn">{{ num }}</a>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                
+                        {% if page_obj.has_next %}
+                            <a href="?search={{ search_query }}&page={{ page_obj.next_page_number }}" class="page-btn next-page" title="Next Page">
+                                <span>Next</span>
+                                <i class="fas fa-angle-right"></i>
+                            </a>
+                            <a href="?search={{ search_query }}&page={{ page_obj.paginator.num_pages }}" class="page-btn last-page" title="Last Page">
+                                <i class="fas fa-angle-double-right"></i>
+                            </a>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="pagination-info">
+                        <span>Showing {{ page_obj.start_index }}-{{ page_obj.end_index }} of {{ page_obj.paginator.count }} results</span>
+                    </div>
                 </div>
+                {% endif %}
 
-                <!-- Search bar -->
-                <div class="search-container">
-                    <form method="GET" action="" class="search-form">
-                        <input type="text" name="search" placeholder="Search by name or composer..." 
-                               class="search-input" value="{{ search_query }}">
-                        <button type="submit" class="search-button">Search</button>
-                    </form>
-                </div>
             {% else %}
-                <div class="nothing">
-                    <p>Nothing here yet...</p>
+                <!-- Empty State -->
+                <div class="empty-state">
+                    <div class="empty-content">
+                        <i class="fas fa-search empty-icon"></i>
+                        <h2>Ready to Search</h2>
+                        <p>Upload an audio file or image to start searching for similar content in your dataset.</p>
+                        <div class="empty-tips">
+                            <div class="tip">
+                                <i class="fas fa-music"></i>
+                                <span>Audio search works with MIDI and WAV files</span>
+                            </div>
+                            <div class="tip">
+                                <i class="fas fa-image"></i>
+                                <span>Image search supports JPG and PNG formats</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             {% endif %}
         </div>
     </div>
+
+    <script>
+        // File preview functionality for query
+        function setupQueryFilePreview(inputId, previewId) {
+            const input = document.getElementById(inputId);
+            const preview = document.getElementById(previewId);
+            
+            input.addEventListener('change', function() {
+                preview.innerHTML = '';
+                if (this.files.length > 0) {
+                    const file = this.files[0];
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'query-file-item';
+                    fileItem.innerHTML = `
+                        <i class="fas fa-file"></i>
+                        <span>${file.name}</span>
+                        <small>${(file.size / 1024).toFixed(1)} KB</small>
+                    `;
+                    preview.appendChild(fileItem);
+                    
+                    // Clear other input
+                    const otherInput = inputId === 'audio-query-input' ? 
+                        document.getElementById('image-query-input') : 
+                        document.getElementById('audio-query-input');
+                    const otherPreview = inputId === 'audio-query-input' ? 
+                        document.getElementById('image-query-preview') : 
+                        document.getElementById('audio-query-preview');
+                    
+                    otherInput.value = '';
+                    otherPreview.innerHTML = '';
+                }
+            });
+        }
+
+        // Setup file previews
+        setupQueryFilePreview('audio-query-input', 'audio-query-preview');
+        setupQueryFilePreview('image-query-input', 'image-query-preview');
+
+        // Form submission handling
+        document.getElementById('queryForm').addEventListener('submit', function(e) {
+            const audioFile = document.getElementById('audio-query-input').files[0];
+            const imageFile = document.getElementById('image-query-input').files[0];
+            
+            if (!audioFile && !imageFile) {
+                e.preventDefault();
+                alert('Please select either an audio file or an image file to search.');
+                return;
+            }
+            
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Searching...</span>';
+            submitBtn.disabled = true;
+        });
+
+        // Search input focus handling
+        const searchInput = document.querySelector('.search-input');
+        if (searchInput) {
+            searchInput.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+            
+            searchInput.addEventListener('blur', function() {
+                this.parentElement.classList.remove('focused');
+            });
+        }
+
+        // Image loading animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const images = document.querySelectorAll('.result-item img');
+            
+            images.forEach(img => {
+                img.addEventListener('load', function() {
+                    this.parentElement.classList.add('loaded');
+                });
+                
+                if (img.complete) {
+                    img.parentElement.classList.add('loaded');
+                }
+            });
+
+            // Set similarity bar widths
+            const similarityBars = document.querySelectorAll('.similarity-fill');
+            similarityBars.forEach(bar => {
+                const similarity = bar.getAttribute('data-similarity');
+                if (similarity) {
+                    bar.style.width = similarity + '%';
+                }
+            });
+        });
+    </script>
 </body>
 </html>

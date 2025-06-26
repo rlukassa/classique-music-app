@@ -2,37 +2,423 @@
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>Upload Your Dataset</title>
-        <link href="{% static 'landing/styles.css' %}" rel="stylesheet"> 
-        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-    </head>
-    <body>
-        <div class = "content-in-center">
-            <form method="POST" enctype="multipart/form-data" action="{% url 'uploadPage' %}" class="form-in-center">
-                {% csrf_token %} <!-- Token CSRF untuk keamanan -->
-                <p><i>Why did Bach have so many kids?<br>Because he couldnt stop composing!</i></p>
-                
-                <label class="custom-file-upload">
-                    <input type="file" name="audio-dataset" accept="audio/mid, audio/midi" multiple/>
-                    <img src="{% static 'landing/images/Musical-Note.png' %}" alt="Musical Note PNG" class="audio-icon">
-                    UPLOAD AUDIO
-                </label>
-                
-                <label class="custom-file-upload">
-                    <input type="file" name="image-dataset" accept="image/jpg, image/jpeg, image/png" multiple/>
-                    <img src="{% static 'landing/images/Imagee.png' %}" alt="Image Icon PNG" class="image-icon">
-                    UPLOAD IMAGE
-                </label>
-
-                <label class="custom-file-upload">
-                    <input type="file" name="mapper-data" accept=".json"/>
-                    <img src="{% static 'landing/images/Mapper.png' %}" alt="Mapper Icon PNG" class="mapper-icon">
-                    UPLOAD MAPPER
-                </label>
-
-                <button type="submit" class="submit-button">SUBMIT</button>
-            </form>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Your Dataset - ClassiQue</title>
+    <link href="{% static 'landing/styles.css' %}?v=2.0" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="upload-container">
+        <div class="upload-header">
+            <h1><i class="fas fa-cloud-upload-alt"></i> Upload Your Dataset</h1>
+            <p class="upload-subtitle">Upload your audio files, images, and mapper to get started</p>
+            <div class="quote">
+                <i class="fas fa-quote-left"></i>
+                <em>Why did Bach have so many kids? Because he couldn't stop composing!</em>
+                <i class="fas fa-quote-right"></i>
+            </div>
         </div>
-    </body>
+
+        <!-- Messages Display -->
+        {% if messages %}
+            <div class="messages-container">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        <i class="fas fa-{% if message.tags == 'error' %}exclamation-triangle{% elif message.tags == 'success' %}check-circle{% else %}info-circle{% endif %}"></i>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Demo Data Loader -->
+        <div class="demo-loader-section">
+            <div class="demo-loader-card">
+                <div class="demo-loader-header">
+                    <h3><i class="fas fa-magic"></i> Quick Demo Setup</h3>
+                    <p>Load sample dataset instantly for testing and demonstration</p>
+                </div>
+                <div class="demo-loader-content">
+                    <div class="demo-features">
+                        <div class="demo-feature">
+                            <i class="fas fa-music"></i>
+                            <span>50+ Classical MIDI files</span>
+                        </div>
+                        <div class="demo-feature">
+                            <i class="fas fa-images"></i>
+                            <span>Album cover images</span>
+                        </div>
+                        <div class="demo-feature">
+                            <i class="fas fa-sitemap"></i>
+                            <span>Complete mapper.json</span>
+                        </div>
+                    </div>
+                    <button type="button" class="demo-loader-btn" id="loadDemoBtn">
+                        <i class="fas fa-bolt"></i>
+                        <span>Load Demo Dataset</span>
+                        <small>One-click setup</small>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- File Status Dashboard -->
+        <div class="file-status-dashboard">
+            <h3><i class="fas fa-chart-bar"></i> Current Upload Status</h3>
+            <div class="status-grid">
+                <div class="status-card audio">
+                    <div class="status-icon">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <div class="status-info">
+                        <h4>Audio Files</h4>
+                        <span class="count" id="audio-count">{{ file_counts.audio_count }}</span>
+                        <small>MIDI files</small>
+                    </div>
+                </div>
+                <div class="status-card image">
+                    <div class="status-icon">
+                        <i class="fas fa-images"></i>
+                    </div>
+                    <div class="status-info">
+                        <h4>Image Files</h4>
+                        <span class="count" id="image-count">{{ file_counts.image_count }}</span>
+                        <small>JPG, PNG files</small>
+                    </div>
+                </div>
+                <div class="status-card mapper">
+                    <div class="status-icon">
+                        <i class="fas fa-sitemap"></i>
+                    </div>
+                    <div class="status-info">
+                        <h4>Mapper File</h4>
+                        <span class="count" id="mapper-count">{{ file_counts.mapper_count }}</span>
+                        <small>JSON file</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upload Form -->
+        <form method="POST" enctype="multipart/form-data" action="{% url 'uploadPage' %}" class="upload-form" id="uploadForm">
+            {% csrf_token %}
+            
+            <div class="upload-sections">
+                <!-- Audio Upload Section -->
+                <div class="upload-section">
+                    <label class="upload-box audio-upload">
+                        <input type="file" name="audio-dataset" accept="audio/mid,audio/midi,.mid,.midi" multiple id="audio-input"/>
+                        <div class="upload-content">
+                            <i class="fas fa-music upload-icon"></i>
+                            <h3>Upload Audio Files</h3>
+                            <p>Drag & drop MIDI files here or click to browse</p>
+                            <span class="file-types">Accepted: .mid, .midi</span>
+                        </div>
+                        <div class="file-preview" id="audio-preview"></div>
+                    </label>
+                </div>
+
+                <!-- Image Upload Section -->
+                <div class="upload-section">
+                    <label class="upload-box image-upload">
+                        <input type="file" name="image-dataset" accept="image/jpg,image/jpeg,image/png,.jpg,.jpeg,.png" multiple id="image-input"/>
+                        <div class="upload-content">
+                            <i class="fas fa-images upload-icon"></i>
+                            <h3>Upload Image Files</h3>
+                            <p>Drag & drop images here or click to browse</p>
+                            <span class="file-types">Accepted: .jpg, .jpeg, .png</span>
+                        </div>
+                        <div class="file-preview" id="image-preview"></div>
+                    </label>
+                </div>
+
+                <!-- Mapper Upload Section -->
+                <div class="upload-section">
+                    <label class="upload-box mapper-upload">
+                        <input type="file" name="mapper-data" accept=".json,application/json" id="mapper-input"/>
+                        <div class="upload-content">
+                            <i class="fas fa-sitemap upload-icon"></i>
+                            <h3>Upload Mapper File</h3>
+                            <p>Drag & drop JSON mapper file here or click to browse</p>
+                            <span class="file-types">Accepted: .json</span>
+                        </div>
+                        <div class="file-preview" id="mapper-preview"></div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button type="button" class="btn btn-danger" id="clearBtn">
+                    <i class="fas fa-trash-alt"></i>
+                    Clear All Uploads
+                </button>
+                <button type="submit" class="btn btn-primary" id="submitBtn">
+                    <i class="fas fa-upload"></i>
+                    Upload Dataset
+                </button>
+            </div>
+        </form>
+
+        <!-- Navigation -->
+        <div class="navigation-links">
+            <a href="{% url 'home' %}" class="nav-link">
+                <i class="fas fa-home"></i> Back to Home
+            </a>
+            {% if file_counts.total_count > 0 %}
+            <a href="{% url 'dataView' %}" class="nav-link">
+                <i class="fas fa-database"></i> View Dataset
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        // File preview functionality
+        function setupFilePreview(inputId, previewId) {
+            const input = document.getElementById(inputId);
+            const preview = document.getElementById(previewId);
+            
+            input.addEventListener('change', function() {
+                preview.innerHTML = '';
+                if (this.files.length > 0) {
+                    const fileList = document.createElement('div');
+                    fileList.className = 'file-list';
+                    
+                    Array.from(this.files).forEach(file => {
+                        const fileItem = document.createElement('div');
+                        fileItem.className = 'file-item';
+                        fileItem.innerHTML = `
+                            <i class="fas fa-file"></i>
+                            <span>${file.name}</span>
+                            <small>${(file.size / 1024).toFixed(1)} KB</small>
+                        `;
+                        fileList.appendChild(fileItem);
+                    });
+                    
+                    preview.appendChild(fileList);
+                }
+            });
+        }
+
+        // Setup file previews
+        setupFilePreview('audio-input', 'audio-preview');
+        setupFilePreview('image-input', 'image-preview');
+        setupFilePreview('mapper-input', 'mapper-preview');
+
+        // Clear uploads functionality
+        document.getElementById('clearBtn').addEventListener('click', function() {
+            if (confirm('Are you sure you want to clear all uploaded files? This action cannot be undone.')) {
+                const button = this;
+                const originalText = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Clearing...';
+                button.disabled = true;
+
+                fetch("{% url 'clear_uploads' %}", {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update file counts
+                        document.getElementById('audio-count').textContent = '0';
+                        document.getElementById('image-count').textContent = '0';
+                        document.getElementById('mapper-count').textContent = '0';
+                        
+                        // Clear form
+                        document.getElementById('uploadForm').reset();
+                        document.querySelectorAll('.file-preview').forEach(preview => {
+                            preview.innerHTML = '';
+                        });
+                        
+                        // Show success message
+                        showMessage('success', data.message);
+                        
+                        // Reload page to update navigation
+                        setTimeout(() => location.reload(), 1500);
+                    } else {
+                        showMessage('error', data.message);
+                    }
+                })
+                .catch(error => {
+                    showMessage('error', 'An error occurred while clearing uploads.');
+                })
+                .finally(() => {
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                });
+            }
+        });
+
+        // Demo loader functionality
+        document.getElementById('loadDemoBtn').addEventListener('click', function() {
+            if (confirm('This will load demo dataset with 85+ classical music files. This will replace any existing uploads. Continue?')) {
+                const button = this;
+                const originalContent = button.innerHTML;
+                
+                // Show loading state
+                button.innerHTML = `
+                    <div class="demo-btn-content">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <div class="demo-btn-text">
+                            <span class="demo-btn-title">Loading Demo Data...</span>
+                            <span class="demo-btn-subtitle">Please wait</span>
+                        </div>
+                    </div>
+                `;
+                button.disabled = true;
+                button.classList.add('loading');
+
+                fetch("{% url 'load_demo_data' %}", {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update file counts with animation
+                        animateCount('audio-count', data.audio_count);
+                        animateCount('image-count', data.image_count);
+                        animateCount('mapper-count', data.mapper_count);
+                        
+                        // Show success message
+                        showMessage('success', data.message);
+                        
+                        // Update button to success state
+                        button.innerHTML = `
+                            <div class="demo-btn-content">
+                                <i class="fas fa-check"></i>
+                                <div class="demo-btn-text">
+                                    <span class="demo-btn-title">Demo Data Loaded!</span>
+                                    <span class="demo-btn-subtitle">${data.audio_count} audio • ${data.image_count} images</span>
+                                </div>
+                            </div>
+                        `;
+                        button.classList.add('success');
+                        
+                        // Reload page after delay to show new navigation
+                        setTimeout(() => location.reload(), 2000);
+                    } else {
+                        showMessage('error', data.message);
+                        button.innerHTML = originalContent;
+                        button.disabled = false;
+                        button.classList.remove('loading');
+                    }
+                })
+                .catch(error => {
+                    showMessage('error', 'An error occurred while loading demo data.');
+                    button.innerHTML = originalContent;
+                    button.disabled = false;
+                    button.classList.remove('loading');
+                });
+            }
+        });
+
+        // Animate count function
+        function animateCount(elementId, targetCount) {
+            const element = document.getElementById(elementId);
+            const startCount = parseInt(element.textContent) || 0;
+            const duration = 1000; // 1 second
+            const startTime = performance.now();
+            
+            function updateCount(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const currentCount = Math.floor(startCount + (targetCount - startCount) * progress);
+                
+                element.textContent = currentCount;
+                
+                if (progress < 1) {
+                    requestAnimationFrame(updateCount);
+                }
+            }
+            
+            requestAnimationFrame(updateCount);
+        }
+
+        // Show message function
+        function showMessage(type, message) {
+            const messagesContainer = document.querySelector('.messages-container') || 
+                document.createElement('div');
+            messagesContainer.className = 'messages-container';
+            
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.innerHTML = `
+                <i class="fas fa-${type === 'error' ? 'exclamation-triangle' : 'check-circle'}"></i>
+                ${message}
+            `;
+            
+            messagesContainer.appendChild(alert);
+            
+            if (!document.querySelector('.messages-container')) {
+                document.querySelector('.upload-header').after(messagesContainer);
+            }
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+        }
+
+        // Form validation
+        document.getElementById('uploadForm').addEventListener('submit', function(e) {
+            const audioFiles = document.getElementById('audio-input').files;
+            const imageFiles = document.getElementById('image-input').files;
+            const mapperFile = document.getElementById('mapper-input').files;
+            
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+            submitBtn.disabled = true;
+            
+            // Note: Server-side validation will handle the actual requirements
+        });
+
+        // Drag and drop functionality
+        document.querySelectorAll('.upload-box').forEach(box => {
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                box.addEventListener(eventName, preventDefaults, false);
+            });
+
+            ['dragenter', 'dragover'].forEach(eventName => {
+                box.addEventListener(eventName, highlight, false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                box.addEventListener(eventName, unhighlight, false);
+            });
+
+            box.addEventListener('drop', handleDrop, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        function highlight(e) {
+            e.currentTarget.classList.add('drag-over');
+        }
+
+        function unhighlight(e) {
+            e.currentTarget.classList.remove('drag-over');
+        }
+
+        function handleDrop(e) {
+            const input = e.currentTarget.querySelector('input[type="file"]');
+            input.files = e.dataTransfer.files;
+            input.dispatchEvent(new Event('change'));
+        }
+    </script>
+</body>
 </html>
