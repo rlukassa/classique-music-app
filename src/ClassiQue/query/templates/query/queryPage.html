@@ -5,8 +5,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Query Search - ClassiQue</title>
-    <link href="{% static 'landing/styles.css' %}?v=2.0" rel="stylesheet">
+    <title>Let's Query | ClassiQue</title>
+    <link rel="icon" type="image/svg+xml" href="{% static 'landing/images/icon.svg' %}">
+    <link rel="shortcut icon" href="{% static 'landing/images/icon.svg' %}">
+    <link href="{% static 'landing/styles.css' %}?v=3.1" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
@@ -128,7 +130,7 @@
                                     <div class="similarity-overlay">
                                         <div class="similarity-score">
                                             <i class="fas fa-percent"></i>
-                                            <span>{{ item.Similarity|floatformat:1 }}%</span>
+                                            <span>{{ item.Similarity }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -142,9 +144,9 @@
                                 </p>
                                 <div class="match-info">
                                     <div class="similarity-bar">
-                                        <div class="similarity-fill" data-similarity="{{ item.Similarity }}"></div>
+                                        <div class="similarity-fill" data-similarity="{{ item.Similarity|cut:'%' }}"></div>
                                     </div>
-                                    <span class="similarity-text">{{ item.Similarity|floatformat:2 }}% match</span>
+                                    <span class="similarity-text">{{ item.Similarity }} match</span>
                                 </div>
                             </div>
                         </div>
@@ -299,7 +301,19 @@
             similarityBars.forEach(bar => {
                 const similarity = bar.getAttribute('data-similarity');
                 if (similarity) {
-                    bar.style.width = similarity + '%';
+                    // Remove % sign if present and convert to number
+                    const numSimilarity = parseFloat(similarity.replace('%', ''));
+                    console.log('Setting similarity bar width:', numSimilarity + '%');
+                    bar.style.width = numSimilarity + '%';
+                    
+                    // Add color based on similarity
+                    if (numSimilarity >= 80) {
+                        bar.style.background = 'linear-gradient(90deg, #22c55e 0%, #16a34a 100%)';
+                    } else if (numSimilarity >= 60) {
+                        bar.style.background = 'linear-gradient(90deg, #fbbf24 0%, #f59e0b 100%)';
+                    } else {
+                        bar.style.background = 'linear-gradient(90deg, #ef4444 0%, #dc2626 100%)';
+                    }
                 }
             });
         });
