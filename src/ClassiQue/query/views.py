@@ -78,6 +78,9 @@ def queryPage(request):
                 # Get absolute path to uploads folder
                 uploads_path = settings.MEDIA_ROOT
                 all_similar_audio = querybyHumming(audio_path, audio_paths, mapper_path[0], uploads_path)
+                # Ensure we always have a list, never None
+                if all_similar_audio is None:
+                    all_similar_audio = []
                 request.session['query_type'] = 'audio'
                 request.session['audio_results'] = all_similar_audio
                 image_true = False
@@ -94,6 +97,9 @@ def queryPage(request):
 
             if mapper_path:
                 all_similar_image = main(query_image_path, database_folder, mapper_path, target_size=(70, 70))
+                # Ensure we always have a list, never None
+                if all_similar_image is None:
+                    all_similar_image = []
                 request.session['query_type'] = 'image'
                 request.session['image_results'] = all_similar_image
                 image_true = True

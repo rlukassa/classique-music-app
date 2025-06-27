@@ -170,10 +170,10 @@ def loadMapper(mapper, search_path='./uploads') :
 
 
 def main(input_image_path, database_folder, mapper, target_size=(75, 75)):
+    """Membandingkan gambar input dengan gambar di database dan menemukan yang paling mirip."""
     mapper = loadMapper(mapper)
     if mapper is None: 
-        return None
-    """Membandingkan gambar input dengan gambar di database dan menemukan yang paling mirip."""
+        return []
     print("Memuat gambar dari folder database...")
 
     # Memuat dan memproses gambar dari database
@@ -209,4 +209,4 @@ def main(input_image_path, database_folder, mapper, target_size=(75, 75)):
             'Album' : fileInfo['album'],
             })
     
-    return results
+    return results if results else []
