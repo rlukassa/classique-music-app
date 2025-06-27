@@ -1,6 +1,7 @@
 from django.core.paginator import Paginator
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseBadRequest
+from django.conf import settings
 import os
 import shutil
 import time
@@ -70,12 +71,12 @@ def queryPage(request):
             query_audio = request.FILES['query-audio']
             audio_path = save_uploaded_file(UPLOAD_FOLDER, query_audio)
 
-            mapper_path = findJsonFile('./uploads')
-            audio_paths = findAudioFile('./uploads')
+            mapper_path = findJsonFile(settings.MEDIA_ROOT)
+            audio_paths = findAudioFile(settings.MEDIA_ROOT)
 
             if mapper_path:
                 # Get absolute path to uploads folder
-                uploads_path = os.path.abspath('./uploads')
+                uploads_path = settings.MEDIA_ROOT
                 all_similar_audio = querybyHumming(audio_path, audio_paths, mapper_path[0], uploads_path)
                 request.session['query_type'] = 'audio'
                 request.session['audio_results'] = all_similar_audio
@@ -88,8 +89,8 @@ def queryPage(request):
             query_image = request.FILES['query-image']
             query_image_path = save_uploaded_file(UPLOAD_FOLDER, query_image)
 
-            database_folder = './uploads'
-            mapper_path = findJsonFile('./uploads')
+            database_folder = settings.MEDIA_ROOT
+            mapper_path = findJsonFile(settings.MEDIA_ROOT)
 
             if mapper_path:
                 all_similar_image = main(query_image_path, database_folder, mapper_path, target_size=(70, 70))
