@@ -63,7 +63,7 @@ def extractFTB(melodyNotes):
         hist[diff + 127] += 1
     return hist
 
-def loadMapper(mapper, search_path='./uploads'):
+def loadMapper(mapper, search_path):  # Remove default path to force explicit path passing
     """Memuat metadata mapper dari file JSON yang terletak di search_path."""
     # Menentukan path lengkap ke file mapper
     mapper_path = os.path.join(search_path, mapper)
@@ -190,7 +190,7 @@ def querybyHumming(hummingMIDI, datasetPath, mapper, uploadFolder=None):
     print("Menampilkan hasil perbandingan...")
     
     # lanjutkan kode disini
-    mapperData = loadMapper(mapper)
+    mapperData = loadMapper(mapper, uploadFolder)  # Pass the correct search path
     if mapperData is None:
         return []
 

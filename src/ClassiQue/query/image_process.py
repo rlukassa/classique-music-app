@@ -157,7 +157,7 @@ def find_top_similar_images(input_image_projection, database_projections, filena
     top_indices = filtered_indices[:]
     return [(filenames[i], similarities[i]) for i in top_indices]
 
-def loadMapper(mapper, search_path='./uploads') : 
+def loadMapper(mapper, search_path):  # Remove default path to force explicit path passing 
     if isinstance(mapper, list):
         mapper = mapper[0]
     mapper_path = os.path.join(search_path, mapper)
@@ -171,7 +171,7 @@ def loadMapper(mapper, search_path='./uploads') :
 
 def main(input_image_path, database_folder, mapper, target_size=(75, 75)):
     """Membandingkan gambar input dengan gambar di database dan menemukan yang paling mirip."""
-    mapper = loadMapper(mapper)
+    mapper = loadMapper(mapper, database_folder)  # Pass the correct search path
     if mapper is None: 
         return []
     print("Memuat gambar dari folder database...")
